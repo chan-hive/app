@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Toolbar } from "@mui/material";
 import { Global } from "@emotion/react";
 
 import Header from "@components/Header";
@@ -19,7 +20,10 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
             <>
                 <Global styles={GlobalStyle} />
                 <Header />
-                <Root>{children}</Root>
+                <Root>
+                    <Toolbar />
+                    {children}
+                </Root>
             </>
         );
     }

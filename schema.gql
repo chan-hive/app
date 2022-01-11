@@ -47,6 +47,7 @@ type File {
 type Query {
   board(id: String!): Board
   boards: [Board!]!
+  threads(count: Int!): [Thread!]!
 }
 
 type Mutation {

@@ -1,0 +1,17 @@
+query threadList($count: Int!) {
+    threads(count: $count) {
+        id
+        opPost {
+            id
+            title
+            content
+            createdAt
+            file {
+                id
+                thumbnailWidth
+                thumbnailHeight
+                uploadedTimestamp
+            }
+        }
+    }
+}

@@ -11,5 +11,5 @@ export const GlobalStyle = css`
 
 export const Root = styled.div`
     margin: 0 auto;
-    padding: 0;
+    padding: ${({ theme }) => theme.spacing(2)};
 `;

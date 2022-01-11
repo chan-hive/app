@@ -2,7 +2,9 @@ import React from "react";
 
 import { Global } from "@emotion/react";
 
-import { GlobalStyle, Root } from "components/Layout.styles";
+import Header from "@components/Header";
+
+import { GlobalStyle, Root } from "@components/Layout.styles";
 
 export interface LayoutProps {
     children: React.ReactNode;
@@ -16,6 +18,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
         return (
             <>
                 <Global styles={GlobalStyle} />
+                <Header />
                 <Root>{children}</Root>
             </>
         );

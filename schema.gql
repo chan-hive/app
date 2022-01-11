@@ -1,0 +1,54 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Board {
+  id: String!
+  title: String!
+  threads: [Thread!]!
+}
+
+type Thread {
+  id: Int!
+  isDead: Boolean!
+  opPost: Post!
+  posts: [Post!]!
+}
+
+type Post {
+  id: Int!
+  name: String!
+  title: String
+  content: String
+  isOP: Boolean!
+  createdAt: DateTime!
+  file: File
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type File {
+  id: Int!
+  name: String!
+  extension: String!
+  md5: String!
+  size: Int!
+  width: Int!
+  height: Int!
+  thumbnailWidth: Int!
+  thumbnailHeight: Int!
+  uploadedTimestamp: Float!
+  isArchived: Boolean!
+}
+
+type Query {
+  board(id: String!): Board
+  boards: [Board!]!
+}
+
+type Mutation {
+  pollEvent: Boolean!
+}

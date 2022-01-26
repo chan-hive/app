@@ -9,6 +9,10 @@ export const GlobalStyle = css`
 
         background-color: #f2f3f9;
     }
+
+    .infinite-scroll-component {
+        overflow: visible !important;
+    }
 `;
 
 export const Root = styled.div`

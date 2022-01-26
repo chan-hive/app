@@ -1,28 +1,6 @@
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 
-export const Root = styled.div`
-    height: 100%;
-
-    margin: 0;
-    border-radius: 6px;
-
-    overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
-
-    box-shadow: rgb(24 25 31 / 5%) 0 6px 25px;
-    background: white;
-
-    transition: all 150ms;
-
-    &:hover {
-        box-shadow: rgb(24 25 31 / 15%) 0 6px 35px;
-        transform: translateY(-4px);
-    }
-`;
-
 export const Body = styled.div`
     padding: ${({ theme }) => theme.spacing(1.75, 1.75, 2.25)};
 
@@ -54,6 +32,8 @@ export const Title = styled(Typography)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    color: #393a40;
 `;
 
 export const Content = styled(Typography)`
@@ -65,6 +45,10 @@ export const Content = styled(Typography)`
     -webkit-box-orient: vertical;
     overflow: hidden;
     -webkit-line-clamp: 2;
+
+    color: #717278;
+
+    transition: color 0.15s ease;
 
     &:first-child {
         padding-top: 0;
@@ -113,4 +97,30 @@ export const FooterItemValue = styled(Typography)`
     line-height: 1;
 
     user-select: none;
+`;
+
+export const Root = styled.div`
+    height: 100%;
+
+    margin: 0;
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: rgb(24 25 31 / 5%) 0 6px 25px;
+    background: white;
+
+    transition: all 150ms;
+
+    &:hover {
+        box-shadow: rgb(24 25 31 / 15%) 0 6px 35px;
+        transform: translateY(-4px);
+
+        ${Content} {
+            color: #44454b;
+        }
+    }
 `;

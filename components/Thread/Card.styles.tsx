@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
+import { css } from "@emotion/react";
 
 export const Body = styled.div`
     padding: ${({ theme }) => theme.spacing(1.75, 1.75, 2.25)};
@@ -99,7 +100,7 @@ export const FooterItemValue = styled(Typography)`
     user-select: none;
 `;
 
-export const Root = styled.div`
+export const Root = styled.div<{ skeleton?: boolean }>`
     height: 100%;
 
     margin: 0;
@@ -115,12 +116,17 @@ export const Root = styled.div`
 
     transition: all 150ms;
 
-    &:hover {
-        box-shadow: rgb(24 25 31 / 15%) 0 6px 35px;
-        transform: translateY(-4px);
+    ${({ skeleton }) =>
+        !skeleton
+            ? css`
+                  &:hover {
+                      box-shadow: rgb(24 25 31 / 15%) 0 6px 35px;
+                      transform: translateY(-4px);
 
-        ${Content} {
-            color: #44454b;
-        }
-    }
+                      ${Content} {
+                          color: #44454b;
+                      }
+                  }
+              `
+            : ""}
 `;

@@ -6,9 +6,9 @@ import { withApollo, WithApolloClient } from "@apollo/client/react/hoc";
 
 import { Container, Grid } from "@mui/material";
 
-import ThreadCard from "@components/ThreadCard";
+import ThreadCard from "@components/Thread/Card";
 
-import { Root } from "@routes/Home.styles";
+import { Root, SkeletonContainer } from "@routes/Home.styles";
 
 import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQueryVariables } from "@query";
 
@@ -21,6 +21,8 @@ interface HomeRouteStates {
     threadCount: number | null;
     hasMore: boolean;
 }
+
+const EMPTY_ARRAY = new Array(16).fill(null);
 
 class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRouteStates> {
     public state: HomeRouteStates = {
@@ -56,6 +58,26 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
         }));
     };
 
+    private renderSkeletonThreadCard = (_: any, index: number) => {
+        return (
+            <Grid key={+index} item xs={3}>
+                <ThreadCard />
+            </Grid>
+        );
+    };
+    private renderSkeletons = (withMargin?: boolean) => {
+        const content = (
+            <Grid container spacing={2} alignItems="stretch">
+                {EMPTY_ARRAY.map(this.renderSkeletonThreadCard)}
+            </Grid>
+        );
+
+        if (withMargin) {
+            return <SkeletonContainer>{content}</SkeletonContainer>;
+        }
+
+        return content;
+    };
     private renderThread = (thread: ThreadListItem) => {
         return (
             <Grid key={thread.id} item xs={3}>
@@ -66,12 +88,18 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
     private renderContent = () => {
         const { threads, threadCount, hasMore } = this.state;
         if (!threads || !threadCount) {
-            return <span>Loading...</span>;
+            return this.renderSkeletons();
         }
 
         return (
             <>
-                <InfiniteScroll hasMore={hasMore} next={this.handleFetch} loader={<h4>loading</h4>} dataLength={threads.length}>
+                <InfiniteScroll
+                    hasMore={hasMore}
+                    next={this.handleFetch}
+                    loader={this.renderSkeletons(true)}
+                    dataLength={threads.length}
+                    scrollThreshold={0.65}
+                >
                     <Grid container spacing={2} alignItems="stretch">
                         {threads.map(this.renderThread)}
                     </Grid>

@@ -1,10 +1,13 @@
 /* eslint-disable react/no-danger */
 import React from "react";
 
-import { Paper } from "@mui/material";
+import ForumIcon from "@mui/icons-material/Forum";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 
-import { Content, Root, Thumbnail, ThumbnailWrapper, Title } from "@components/ThreadCard.styles";
+import { BoardName, Body, Content, Footer, FooterItemValue, Item, Metadata, Root, Thumbnail, ThumbnailWrapper, Title } from "@components/ThreadCard.styles";
+
 import { ThreadListItem } from "@utils/types";
+import { Placeholder } from "@styles/placeholder";
 
 export interface ThreadCardProps {
     thread: ThreadListItem;
@@ -14,30 +17,42 @@ export interface ThreadCardStates {}
 export default class ThreadCard extends React.Component<ThreadCardProps, ThreadCardStates> {
     public render() {
         const { thread } = this.props;
-        const { file, content, title } = thread.opPost;
+        const { file } = thread.opPost;
 
         return (
-            <Paper elevation={0} sx={{ border: "1px solid #eaedf2", boxSizing: "border-box" }}>
-                <Root>
-                    <ThumbnailWrapper>
-                        {file && (
-                            <Thumbnail
-                                style={{
-                                    width: file.thumbnailWidth,
-                                    height: file.thumbnailHeight,
-                                    backgroundImage: `url(http://localhost:9000/static/${file.uploadedTimestamp}s.jpg)`,
-                                }}
-                            />
-                        )}
-                    </ThumbnailWrapper>
-                    <Title>{title}</Title>
-                    {content && (
-                        <Content>
-                            <span dangerouslySetInnerHTML={{ __html: content }} />
-                        </Content>
+            <Root>
+                <ThumbnailWrapper>
+                    {file && (
+                        <Thumbnail
+                            style={{
+                                width: "100%",
+                                height: 145,
+                                backgroundImage: thread.opPost.file ? `url(${thread.opPost.file.thumbnailUrl})` : "none",
+                            }}
+                        />
                     )}
-                </Root>
-            </Paper>
+                </ThumbnailWrapper>
+                <Body>
+                    <Title variant="h6">{thread.opPost.title || `Thread #${thread.id}`}</Title>
+                    <Content variant="body1">
+                        <span dangerouslySetInnerHTML={{ __html: thread.opPost.content || "" }} />
+                    </Content>
+                </Body>
+                <Metadata>
+                    <BoardName variant="body1">{thread.board.title}</BoardName>
+                </Metadata>
+                <Footer>
+                    <Placeholder />
+                    <Item>
+                        <ForumIcon />
+                        <FooterItemValue variant="body1">{thread.postCount}</FooterItemValue>
+                    </Item>
+                    <Item>
+                        <PermMediaIcon />
+                        <FooterItemValue variant="body1">{thread.fileCount}</FooterItemValue>
+                    </Item>
+                </Footer>
+            </Root>
         );
     }
 }

@@ -62,12 +62,14 @@ export default class ThreadCard extends React.Component<ThreadCardProps, ThreadC
                         </Link>
                     )}
                 </ThumbnailWrapper>
-                <Body>
-                    <Title variant="h6">{thread.opPost.title || `Thread #${thread.id}`}</Title>
-                    <Content variant="body1">
-                        <span dangerouslySetInnerHTML={{ __html: thread.opPost.content || "" }} />
-                    </Content>
-                </Body>
+                <Link href="/[boardId]/thread/[threadId]" as={`/${thread.board.id}/thread/${thread.id}`} passHref>
+                    <Body>
+                        <Title variant="h6">{thread.opPost.title || `Thread #${thread.id}`}</Title>
+                        <Content variant="body1">
+                            <span dangerouslySetInnerHTML={{ __html: thread.opPost.content || "" }} />
+                        </Content>
+                    </Body>
+                </Link>
                 <Metadata>
                     <BoardName variant="body1">{thread.board.title}</BoardName>
                 </Metadata>

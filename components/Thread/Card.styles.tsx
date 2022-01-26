@@ -2,8 +2,10 @@ import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import { css } from "@emotion/react";
 
-export const Body = styled.div`
+export const Body = styled.a`
     padding: ${({ theme }) => theme.spacing(1.75, 1.75, 2.25)};
+
+    text-decoration: none;
 
     flex: 1 1 auto;
 `;

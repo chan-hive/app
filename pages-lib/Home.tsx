@@ -14,6 +14,7 @@ import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQue
 
 import { reactNoop } from "@utils/noop";
 import { ThreadListItem } from "@utils/types";
+import ThreadListLoader from "@components/Thread/ListLoader";
 
 interface HomeRouteProps {}
 interface HomeRouteStates {
@@ -60,7 +61,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
 
     private renderSkeletonThreadCard = (_: any, index: number) => {
         return (
-            <Grid key={+index} item xs={3}>
+            <Grid key={+index} item xs={12} sm={6} md={6} lg={3}>
                 <ThreadCard />
             </Grid>
         );
@@ -80,7 +81,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
     };
     private renderThread = (thread: ThreadListItem) => {
         return (
-            <Grid key={thread.id} item xs={3}>
+            <Grid key={thread.id} item xs={12} sm={6} md={4} lg={3}>
                 <ThreadCard thread={thread} />
             </Grid>
         );
@@ -93,13 +94,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
 
         return (
             <>
-                <InfiniteScroll
-                    hasMore={hasMore}
-                    next={this.handleFetch}
-                    loader={this.renderSkeletons(true)}
-                    dataLength={threads.length}
-                    scrollThreshold={0.65}
-                >
+                <InfiniteScroll hasMore={hasMore} next={this.handleFetch} loader={<ThreadListLoader />} dataLength={threads.length}>
                     <Grid container spacing={2} alignItems="stretch">
                         {threads.map(this.renderThread)}
                     </Grid>

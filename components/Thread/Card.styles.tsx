@@ -8,9 +8,11 @@ export const Body = styled.div`
     flex: 1 1 auto;
 `;
 
-export const Thumbnail = styled.div`
+export const Thumbnail = styled.a`
     margin: 0;
     padding: 0;
+
+    display: block;
 
     background-size: cover;
     background-position: center;

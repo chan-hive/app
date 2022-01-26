@@ -1,5 +1,6 @@
 /* eslint-disable react/no-danger */
 import React from "react";
+import Link from "next/link";
 
 import { Skeleton } from "@mui/material";
 import ForumIcon from "@mui/icons-material/Forum";
@@ -50,13 +51,15 @@ export default class ThreadCard extends React.Component<ThreadCardProps, ThreadC
             <Root>
                 <ThumbnailWrapper>
                     {file && (
-                        <Thumbnail
-                            style={{
-                                width: "100%",
-                                height: 145,
-                                backgroundImage: thread.opPost.file ? `url(${thread.opPost.file.thumbnailUrl})` : "none",
-                            }}
-                        />
+                        <Link href="/[boardId]/thread/[threadId]" as={`/${thread.board.id}/thread/${thread.id}`} passHref>
+                            <Thumbnail
+                                style={{
+                                    width: "100%",
+                                    height: 145,
+                                    backgroundImage: thread.opPost.file ? `url(${thread.opPost.file.thumbnailUrl})` : "none",
+                                }}
+                            />
+                        </Link>
                     )}
                 </ThumbnailWrapper>
                 <Body>

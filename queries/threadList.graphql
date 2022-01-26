@@ -1,6 +1,14 @@
-query threadList($count: Int!) {
-    threads(count: $count) {
+query threadList($count: Int!, $before: DateTime) {
+    threadCount
+    threads(count: $count, before: $before) {
         id
+        board {
+            id
+            title
+        }
+        postCount
+        fileCount
+        createdAt
         opPost {
             id
             title
@@ -11,6 +19,7 @@ query threadList($count: Int!) {
                 thumbnailWidth
                 thumbnailHeight
                 uploadedTimestamp
+                thumbnailUrl
             }
         }
     }

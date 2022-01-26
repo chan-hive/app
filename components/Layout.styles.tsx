@@ -6,6 +6,8 @@ export const GlobalStyle = css`
     html {
         margin: 0;
         padding: 0;
+
+        background-color: #f2f3f9;
     }
 `;
 

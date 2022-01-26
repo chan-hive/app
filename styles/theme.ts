@@ -9,4 +9,7 @@ export const theme = createTheme({
             main: "#006500",
         },
     },
+    typography: {
+        fontSize: 12,
+    },
 });

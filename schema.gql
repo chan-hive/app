@@ -11,9 +11,18 @@ type Board {
 type Thread {
   id: Int!
   isDead: Boolean!
+  createdAt: DateTime!
+  postCount: Int!
+  fileCount: Int!
+  board: Board!
   opPost: Post!
   posts: [Post!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Post {
   id: Int!
@@ -24,11 +33,6 @@ type Post {
   createdAt: DateTime!
   file: File
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type File {
   id: Int!
@@ -42,12 +46,16 @@ type File {
   thumbnailHeight: Int!
   uploadedTimestamp: Float!
   isArchived: Boolean!
+  url: String!
+  thumbnailUrl: String!
 }
 
 type Query {
   board(id: String!): Board
   boards: [Board!]!
-  threads(count: Int!): [Thread!]!
+  threadCount: Int!
+  thread(threadId: Int!, boardId: String!): Thread!
+  threads(before: DateTime, count: Int!): [Thread!]!
 }
 
 type Mutation {

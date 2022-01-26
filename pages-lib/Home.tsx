@@ -1,34 +1,82 @@
 import React from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 
-import { Container } from "@mui/material";
-import Masonry from "@mui/lab/Masonry";
+import { withApollo, WithApolloClient } from "@apollo/client/react/hoc";
+
+import { Container, Grid } from "@mui/material";
 
 import ThreadCard from "@components/ThreadCard";
 
 import { Root } from "@routes/Home.styles";
 
-import { ThreadListComponent, ThreadListQueryResult } from "@query";
+import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQueryVariables } from "@query";
+
+import { reactNoop } from "@utils/noop";
+import { ThreadListItem } from "@utils/types";
 
 interface HomeRouteProps {}
-interface HomeRouteStates {}
+interface HomeRouteStates {
+    threads: ThreadListItem[] | null;
+    threadCount: number | null;
+    hasMore: boolean;
+}
 
-class HomeRoute extends React.Component<HomeRouteProps, HomeRouteStates> {
-    public state: HomeRouteStates = {};
+class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRouteStates> {
+    public state: HomeRouteStates = {
+        threads: null,
+        threadCount: null,
+        hasMore: true,
+    };
 
-    private renderContent = ({ data, loading }: ThreadListQueryResult) => {
-        if (!data || loading) {
-            return <div>Loading...</div>;
+    private handleQueryCompleted = ({ threads, threadCount }: ThreadListQuery) => {
+        this.setState({
+            threads,
+            threadCount,
+        });
+    };
+
+    private handleFetch = async () => {
+        const { threads } = this.state;
+        if (!this.props.client) {
+            throw new Error("Couldn't find an instance of Apollo Client.");
+        }
+
+        const { data } = await this.props.client.query<ThreadListQuery, ThreadListQueryVariables>({
+            query: ThreadListDocument,
+            variables: {
+                count: 16,
+                before: threads && threads.length > 0 ? threads[threads.length - 1].createdAt : undefined,
+            },
+        });
+
+        this.setState((prevStates: HomeRouteStates) => ({
+            threads: prevStates.threads ? [...prevStates.threads, ...data.threads] : [...data.threads],
+            hasMore: data.threads.length >= 16,
+        }));
+    };
+
+    private renderThread = (thread: ThreadListItem) => {
+        return (
+            <Grid key={thread.id} item xs={3}>
+                <ThreadCard thread={thread} />
+            </Grid>
+        );
+    };
+    private renderContent = () => {
+        const { threads, threadCount, hasMore } = this.state;
+        if (!threads || !threadCount) {
+            return <span>Loading...</span>;
         }
 
         return (
-            <div>
-                <Masonry spacing={2} columns={4}>
-                    {data.threads.map(thread => (
-                        <ThreadCard key={thread.id} thread={thread} />
-                    ))}
-                </Masonry>
-            </div>
+            <>
+                <InfiniteScroll hasMore={hasMore} next={this.handleFetch} loader={<h4>loading</h4>} dataLength={threads.length}>
+                    <Grid container spacing={2} alignItems="stretch">
+                        {threads.map(this.renderThread)}
+                    </Grid>
+                </InfiniteScroll>
+            </>
         );
     };
     public render() {
@@ -37,14 +85,15 @@ class HomeRoute extends React.Component<HomeRouteProps, HomeRouteStates> {
                 <Head>
                     <title>Chanhive</title>
                 </Head>
+                <ThreadListComponent variables={{ count: 16 }} onCompleted={this.handleQueryCompleted}>
+                    {reactNoop}
+                </ThreadListComponent>
                 <Root>
-                    <Container>
-                        <ThreadListComponent variables={{ count: 15 }}>{this.renderContent}</ThreadListComponent>
-                    </Container>
+                    <Container>{this.renderContent()}</Container>
                 </Root>
             </>
         );
     }
 }
 
-export default HomeRoute;
+export default withApollo<HomeRouteProps>(HomeRoute);

@@ -6,6 +6,7 @@ import { withApollo, WithApolloClient } from "@apollo/client/react/hoc";
 
 import { Container, Grid } from "@mui/material";
 
+import ThreadListLoader from "@components/Thread/ListLoader";
 import ThreadCard from "@components/Thread/Card";
 
 import { Root, SkeletonContainer } from "@routes/Home.styles";
@@ -14,7 +15,6 @@ import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQue
 
 import { reactNoop } from "@utils/noop";
 import { ThreadListItem } from "@utils/types";
-import ThreadListLoader from "@components/Thread/ListLoader";
 
 interface HomeRouteProps {}
 interface HomeRouteStates {

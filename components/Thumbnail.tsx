@@ -45,15 +45,12 @@ class Thumbnail extends React.Component<ThumbnailProps & WithStateProps<RecoilSt
 
     public render() {
         const { size, file, href, as, mosaic } = this.props;
-        let style: React.CSSProperties = {};
         const Component = href ? LinkRoot : Root;
-        if (size) {
-            style = {
-                width: size.width,
-                height: size.height,
-                backgroundImage: `url(${file.thumbnailUrl})`,
-            };
-        }
+        const style: React.CSSProperties = {
+            width: size?.width || file.thumbnailWidth,
+            height: size?.height || file.thumbnailHeight,
+            backgroundImage: `url(${file.thumbnailUrl})`,
+        };
 
         const content = (
             <Component

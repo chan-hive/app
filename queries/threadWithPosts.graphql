@@ -1,0 +1,16 @@
+query threadWithPosts($boardId: String!, $threadId: Int!) {
+    thread(threadId: $threadId, boardId: $boardId) {
+        id
+        posts {
+            id
+            title
+            name
+            content
+            isOP
+            createdAt
+            file {
+                ...FileInformation
+            }
+        }
+    }
+}

@@ -10,17 +10,18 @@ import { GlobalStyle, Root } from "@components/Layout.styles";
 
 export interface LayoutProps {
     children: React.ReactNode;
+    title?: string | null;
 }
 export interface LayoutStates {}
 
 export default class Layout extends React.Component<LayoutProps, LayoutStates> {
     public render() {
-        const { children } = this.props;
+        const { children, title } = this.props;
 
         return (
             <>
                 <Global styles={GlobalStyle} />
-                <Header />
+                <Header title={title} />
                 <Root>
                     <Toolbar />
                     {children}

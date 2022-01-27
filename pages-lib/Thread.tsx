@@ -6,7 +6,7 @@ import Post from "@components/Post";
 
 import { Root } from "@routes/Thread.styles";
 
-import { ThreadWithPostsComponent, ThreadWithPostsQuery } from "@query";
+import { ThreadInformationQuery, ThreadWithPostsComponent, ThreadWithPostsQuery } from "@query";
 
 import { reactNoop } from "@utils/noop";
 import { ThreadPost } from "@utils/types";
@@ -15,6 +15,7 @@ import { parsePostContent } from "@utils/parsePostContent";
 export interface ThreadRouteProps {
     threadId: number;
     boardId: string;
+    thread: ThreadInformationQuery["thread"];
 }
 export interface ThreadRouteStates {
     posts: ThreadPost[] | null;

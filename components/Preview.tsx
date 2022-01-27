@@ -8,6 +8,7 @@ import { Root } from "@components/Preview.styles";
 
 import { FileInformation, RecoilStateValue } from "@utils/types";
 import { VideoHelper } from "@utils/video-helper";
+import { isTouchDevice } from "@utils/isTouchDevice";
 
 export interface PreviewProps {}
 export interface PreviewStates {}
@@ -95,7 +96,7 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
 
     public render() {
         const { state } = this.props;
-        if (!state) {
+        if (!state || isTouchDevice()) {
             return null;
         }
 

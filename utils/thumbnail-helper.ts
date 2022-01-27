@@ -1,3 +1,5 @@
+import { VideoHelper } from "@utils/video-helper";
+
 import { FileInformation } from "@utils/types";
 
 interface SubscribeEntry {
@@ -34,6 +36,15 @@ export class ThumbnailHelper {
     private handleWheel(this: Omit<SubscribeEntry, "wheelListener">, e: Event) {
         if (!this.file.extension.endsWith("webm")) {
             return;
+        }
+
+        if (e instanceof WheelEvent) {
+            const currentVolume = VideoHelper.instance.volume;
+            if (e.deltaY > 0) {
+                VideoHelper.instance.setVolume(Math.max(currentVolume - 0.1, 0));
+            } else {
+                VideoHelper.instance.setVolume(Math.min(currentVolume + 0.1, 1));
+            }
         }
 
         e.preventDefault();

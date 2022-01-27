@@ -7,6 +7,7 @@ import { previewState } from "@states/preview";
 import { Root } from "@components/Preview.styles";
 
 import { FileInformation, RecoilStateValue } from "@utils/types";
+import { VideoHelper } from "@utils/video-helper";
 
 export interface PreviewProps {}
 export interface PreviewStates {}
@@ -26,8 +27,14 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
         this.clientWidth = document.documentElement.clientWidth;
         this.clientHeight = document.documentElement.clientHeight;
     }
+    public componentDidUpdate(prevProps: Readonly<PreviewProps & WithStateProps<RecoilStateValue<typeof previewState>>>) {
+        if (prevProps.state !== this.props.state && !this.props.state && prevProps.state) {
+            VideoHelper.instance.removeElement(prevProps.state);
+        }
+    }
     public componentWillUnmount() {
         this.isUnmounted = true;
+        VideoHelper.instance.removeAllElement();
     }
 
     private updateDOMPosition = (dom: HTMLImageElement | HTMLVideoElement, file: FileInformation) => {
@@ -79,6 +86,10 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
         this.mouseY = e.clientY;
     };
     public handleMediaRef = (element: HTMLImageElement | HTMLVideoElement | null) => {
+        if (element instanceof HTMLVideoElement && this.props.state) {
+            VideoHelper.instance.addElement(this.props.state, element);
+        }
+
         this.domElement = element;
     };
 

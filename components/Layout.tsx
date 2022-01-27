@@ -4,6 +4,7 @@ import { Toolbar } from "@mui/material";
 import { Global } from "@emotion/react";
 
 import Header from "@components/Header";
+import Preview from "@components/Preview";
 
 import { GlobalStyle, Root } from "@components/Layout.styles";
 
@@ -24,6 +25,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
                     <Toolbar />
                     {children}
                 </Root>
+                <Preview />
             </>
         );
     }

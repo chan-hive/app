@@ -1,0 +1,12 @@
+fragment FileInformation on File {
+    id
+    name
+    extension
+    width
+    height
+    thumbnailWidth
+    thumbnailHeight
+    url
+    thumbnailUrl
+    uploadedTimestamp
+}

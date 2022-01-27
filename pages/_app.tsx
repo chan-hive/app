@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import { RecoilRoot } from "recoil";
 
 import { ThemeProvider } from "@mui/material";
 
@@ -20,7 +21,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ApolloProvider client={apolloClient}>
             <ThemeProvider theme={theme}>
-                <Component {...pageProps} />
+                <RecoilRoot>
+                    <Component {...pageProps} />
+                </RecoilRoot>
             </ThemeProvider>
         </ApolloProvider>
     );

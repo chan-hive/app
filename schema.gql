@@ -46,6 +46,7 @@ type File {
   thumbnailHeight: Int!
   uploadedTimestamp: Float!
   isArchived: Boolean!
+  isImage: Boolean!
   url: String!
   thumbnailUrl: String!
 }

@@ -6,7 +6,9 @@ import { Skeleton } from "@mui/material";
 import ForumIcon from "@mui/icons-material/Forum";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 
-import { BoardName, Body, Content, Footer, FooterItemValue, Item, Metadata, Root, Thumbnail, ThumbnailWrapper, Title } from "@components/Thread/Card.styles";
+import Thumbnail from "@components/Thumbnail";
+
+import { BoardName, Body, Content, Footer, FooterItemValue, Item, Metadata, Root, ThumbnailWrapper, Title } from "@components/Thread/Card.styles";
 
 import { ThreadListItem } from "@utils/types";
 import { Placeholder } from "@styles/placeholder";
@@ -15,6 +17,8 @@ export interface ThreadCardProps {
     thread?: ThreadListItem;
 }
 export interface ThreadCardStates {}
+
+const THUMBNAIL_SIZE = { width: "100%", height: 145 };
 
 export default class ThreadCard extends React.Component<ThreadCardProps, ThreadCardStates> {
     private renderSkeleton = () => {
@@ -51,15 +55,13 @@ export default class ThreadCard extends React.Component<ThreadCardProps, ThreadC
             <Root>
                 <ThumbnailWrapper>
                     {file && (
-                        <Link href="/[boardId]/thread/[threadId]" as={`/${thread.board.id}/thread/${thread.id}`} passHref>
-                            <Thumbnail
-                                style={{
-                                    width: "100%",
-                                    height: 145,
-                                    backgroundImage: thread.opPost.file ? `url(${thread.opPost.file.thumbnailUrl})` : "none",
-                                }}
-                            />
-                        </Link>
+                        <Thumbnail
+                            mosaic={thread.board.id !== "wsg"}
+                            file={file}
+                            size={THUMBNAIL_SIZE}
+                            href="/[boardId]/thread/[threadId]"
+                            as={`/${thread.board.id}/thread/${thread.id}`}
+                        />
                     )}
                 </ThumbnailWrapper>
                 <Link href="/[boardId]/thread/[threadId]" as={`/${thread.board.id}/thread/${thread.id}`} passHref>

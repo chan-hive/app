@@ -15,11 +15,7 @@ query threadList($count: Int!, $before: DateTime) {
             content
             createdAt
             file {
-                id
-                thumbnailWidth
-                thumbnailHeight
-                uploadedTimestamp
-                thumbnailUrl
+                ...FileInformation
             }
         }
     }

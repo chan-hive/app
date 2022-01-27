@@ -10,19 +10,6 @@ export const Body = styled.a`
     flex: 1 1 auto;
 `;
 
-export const Thumbnail = styled.a`
-    margin: 0;
-    padding: 0;
-
-    display: block;
-
-    background-size: cover;
-    background-position: center;
-
-    transform: scale(1.1);
-    filter: blur(12px) brightness(0.6);
-`;
-
 export const ThumbnailWrapper = styled.div`
     position: relative;
 

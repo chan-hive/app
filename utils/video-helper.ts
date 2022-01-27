@@ -4,7 +4,7 @@ export class VideoHelper {
     public static readonly instance = new VideoHelper();
 
     private elements: Map<FileInformation["id"], HTMLVideoElement>;
-    private actualVolume: number = 1;
+    private actualVolume: number = parseFloat(typeof localStorage === "undefined" ? "1" : localStorage.getItem("volume") || "1.0");
 
     public get volume() {
         return this.actualVolume;

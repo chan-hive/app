@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
     reactStrictMode: true,
+    publicRuntimeConfig: {
+        NEXT_PUBLIC_GRAPHQL_URI: process.env.NEXT_PUBLIC_GRAPHQL_URI,
+        NEXT_PUBLIC_WS_GRAPHQL_URI: process.env.NEXT_PUBLIC_WS_GRAPHQL_URI,
+    },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find(rule => rule.test && rule.test.test(".svg"), undefined);
         if (fileLoaderRule) {

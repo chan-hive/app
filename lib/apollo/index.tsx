@@ -1,3 +1,4 @@
+import getConfig from "next/config";
 import { useMemo } from "react";
 import merge from "deepmerge";
 import { IncomingHttpHeaders } from "http";
@@ -30,9 +31,13 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
         }).then(response => response);
     };
 
+    const { NEXT_PUBLIC_GRAPHQL_URI, NEXT_PUBLIC_WS_GRAPHQL_URI }: { [key: string]: string } = getConfig();
+    const uri: string = process.env.API_ENTRYPOINT || process.env.NEXT_PUBLIC_GRAPHQL_URI || NEXT_PUBLIC_GRAPHQL_URI;
+    const wsUri: string = process.env.API_WS_ENTRYPOINT || process.env.NEXT_PUBLIC_WS_GRAPHQL_URI || NEXT_PUBLIC_WS_GRAPHQL_URI;
+
     const createHttpLink = () => {
         return createUploadLink({
-            uri: process.env.API_ENTRYPOINT || process.env.NEXT_PUBLIC_GRAPHQL_URI,
+            uri,
             fetchOptions: {
                 mode: "cors",
             },
@@ -57,7 +62,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
                 return false;
             },
             new WebSocketLink(
-                new SubscriptionClient(process.env.API_WS_ENTRYPOINT || process.env.NEXT_PUBLIC_WS_GRAPHQL_URI, {
+                new SubscriptionClient(wsUri, {
                     lazy: true,
                     reconnect: true,
                 }),

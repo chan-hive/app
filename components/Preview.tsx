@@ -46,11 +46,9 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
         if (this.mouseX <= threshold) {
             style.left = `${marginX}px`;
             style.right = "";
-            console.info(`Left: ${marginX}px, Top: ${top}px`);
         } else {
             style.left = "";
             style.right = `${marginX}px`;
-            console.info(`Right: ${marginX}px, Top: ${top}px`);
         }
     };
     private getDOMStyle = (file: FileInformation): React.CSSProperties => {

@@ -3,7 +3,8 @@ import { FileInformation } from "@utils/types";
 export class VideoHelper {
     public static readonly instance = new VideoHelper();
 
-    private elements: Map<FileInformation["id"], HTMLVideoElement>;
+    private elements: Map<FileInformation["id"], HTMLVideoElement> = new Map<FileInformation["id"], HTMLVideoElement>();
+    private lastTimes: Map<FileInformation["id"], number> = new Map<FileInformation["id"], number>();
     private actualVolume: number = parseFloat(typeof localStorage === "undefined" ? "1" : localStorage.getItem("volume") || "1.0");
 
     public get volume() {
@@ -11,8 +12,6 @@ export class VideoHelper {
     }
 
     private constructor() {
-        this.elements = new Map<FileInformation["id"], HTMLVideoElement>();
-
         if (typeof window !== "undefined") {
             setInterval(this.handleRefresh, 100);
             setInterval(this.handleSave, 500);
@@ -20,9 +19,22 @@ export class VideoHelper {
     }
 
     public addElement = (file: FileInformation, element: HTMLVideoElement) => {
+        const lastTime = this.lastTimes.get(file.id);
+        if (lastTime) {
+            // eslint-disable-next-line no-param-reassign
+            element.currentTime = lastTime;
+        }
+
+        element.play();
+
         this.elements.set(file.id, element);
     };
     public removeElement = (file: FileInformation) => {
+        const element = this.elements.get(file.id);
+        if (element) {
+            this.lastTimes.set(file.id, element.currentTime);
+        }
+
         this.elements.delete(file.id);
     };
     public removeAllElement = () => {

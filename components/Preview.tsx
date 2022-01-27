@@ -99,7 +99,7 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
             return null;
         }
 
-        return <Root innerRef={this.handleMediaRef} file={state} autoPlay loop style={this.getDOMStyle(state)} />;
+        return <Root innerRef={this.handleMediaRef} file={state} loop style={this.getDOMStyle(state)} />;
     }
 }
 

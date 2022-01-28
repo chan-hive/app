@@ -44,7 +44,7 @@ export default class ThreadProvider extends React.Component<ThreadProviderProps,
         const targetPost = posts.find(p => p.id === id);
 
         this.setState({
-            focusedPost: targetPost,
+            focusedPost: targetPost || null,
         });
     };
 

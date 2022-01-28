@@ -16,3 +16,14 @@ export const Body = styled.div`
 export const ThumbnailWrapper = styled.div`
     margin-right: ${({ theme }) => theme.spacing(2)};
 `;
+
+export const ModalRoot = styled.div`
+    width: 800px;
+    margin: 0;
+    padding: 0;
+
+    position: fixed;
+    top: 0;
+
+    pointer-events: none;
+`;

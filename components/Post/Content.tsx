@@ -2,13 +2,16 @@ import React from "react";
 
 import { Typography } from "@mui/material";
 
-import { Quote, QuoteLink, Root, Text } from "@components/Post/Content.styles";
+import PostQuoteLink from "@components/Post/QuoteLink";
+
+import { Quote, Root, Text } from "@components/Post/Content.styles";
 
 import { PostContent as PostContentType, PostContentItem, QuoteLinkPostContent, QuotePostContent, TextPostContent } from "@utils/parsePostContent";
+import { ThreadPost } from "@utils/types";
 
 export interface PostContentProps {
     content: PostContentType;
-    postId: number;
+    post: ThreadPost;
 }
 export interface PostContentStates {}
 
@@ -16,7 +19,7 @@ class PostContent extends React.PureComponent<PostContentProps, PostContentState
     private renderText = (item: TextPostContent, key: number) => <Text key={key}>{item.content}</Text>;
     private renderQuote = (item: QuotePostContent, key: number): JSX.Element => <Quote key={key}>{item.content}</Quote>;
     private renderQuoteLink = (item: QuoteLinkPostContent, key: number): JSX.Element => {
-        return <QuoteLink key={key}>{`>>${item.postId}`}</QuoteLink>;
+        return <PostQuoteLink key={key} item={item} />;
     };
     private renderItem = (item: PostContentItem, key: number) => {
         switch (item.type) {

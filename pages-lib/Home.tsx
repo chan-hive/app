@@ -103,6 +103,8 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
         );
     };
     public render() {
+        const content = this.renderContent();
+
         return (
             <>
                 <Head>
@@ -112,7 +114,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
                     {reactNoop}
                 </ThreadListComponent>
                 <Root>
-                    <Container>{this.renderContent()}</Container>
+                    <Container>{content}</Container>
                 </Root>
             </>
         );

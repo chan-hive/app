@@ -5,8 +5,9 @@ import { Global } from "@emotion/react";
 
 import Header from "@components/Header";
 import Preview from "@components/Preview";
+import Drawer from "@components/Drawer";
 
-import { GlobalStyle, Root } from "@components/Layout.styles";
+import { GlobalStyle, Main, Root } from "@components/Layout.styles";
 
 export interface LayoutProps {
     children: React.ReactNode;
@@ -44,8 +45,11 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
                 <Global styles={GlobalStyle} />
                 <Header title={title} onAppBarHeightChange={this.handleAppBarHeightChange} />
                 <Root>
-                    <Toolbar />
-                    {children}
+                    <Drawer />
+                    <Main>
+                        <Toolbar />
+                        {children}
+                    </Main>
                 </Root>
                 <Preview />
             </LayoutContext.Provider>

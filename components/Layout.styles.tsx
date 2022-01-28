@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
+import { DRAWER_WIDTH } from "@constants/layout";
+
 export const GlobalStyle = css`
     body,
     html {
@@ -18,4 +20,11 @@ export const GlobalStyle = css`
 export const Root = styled.div`
     margin: 0 auto;
     padding: ${({ theme }) => theme.spacing(2, 0)};
+`;
+
+export const Main = styled.main`
+    ${({ theme }) => theme.breakpoints.up("xl")} {
+        padding-left: ${({ theme }) => theme.spacing(DRAWER_WIDTH / 8 + 2)};
+        padding-right: ${({ theme }) => theme.spacing(2)};
+    }
 `;

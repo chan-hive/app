@@ -26,7 +26,8 @@
             "@query": ["./queries"],
             "@lib/*": ["./lib/*"],
             "@utils/*": ["./utils/*"],
-            "@states/*": ["./states/*"]
+            "@states/*": ["./states/*"],
+            "@constants/*": ["./constants/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

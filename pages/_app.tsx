@@ -1,4 +1,4 @@
-import type { AppProps } from "next/app";
+import App, { AppContext, AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 
 import { ThemeProvider } from "@mui/material";
@@ -28,5 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         </ApolloProvider>
     );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+    const appProps = await App.getInitialProps(appContext);
+    console.info(":D");
+    return { ...appProps };
+};
 
 export default MyApp;

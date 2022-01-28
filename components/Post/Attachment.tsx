@@ -4,8 +4,8 @@ import Thumbnail from "@components/Thumbnail";
 
 import { Media, Root, ThumbnailWrapper } from "@components/Post/Attachment.styles";
 
-import { FileInformation } from "@utils/types";
 import { VideoHelper } from "@utils/video-helper";
+import { FileInformation } from "@utils/types";
 
 export interface PostAttachmentProps {
     file: FileInformation;

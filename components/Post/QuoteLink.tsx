@@ -10,18 +10,29 @@ export interface PostQuoteLinkProps {
 }
 export interface PostQuoteLinkStates {}
 
-class PostQuoteLink extends React.Component<PostQuoteLinkProps & WithThreadProps, PostQuoteLinkStates> {
+class PostQuoteLink extends React.PureComponent<PostQuoteLinkProps & WithThreadProps, PostQuoteLinkStates> {
     private handleMouseOver = () => {
         this.props.setFocusedThreadId(this.props.item.postId);
     };
     private handleMouseOut = () => {
         this.props.setFocusedThreadId(null);
     };
+    private handleClick = (e: React.MouseEvent) => {
+        this.props.scrollTo(this.props.item.postId);
+        e.preventDefault();
+    };
 
     public render() {
         const { item } = this.props;
 
-        return <Root onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>{`>>${item.postId}`}</Root>;
+        return (
+            <Root
+                href={`#p${item.postId}`}
+                onClick={this.handleClick}
+                onMouseOver={this.handleMouseOver}
+                onMouseOut={this.handleMouseOut}
+            >{`>>${item.postId}`}</Root>
+        );
     }
 }
 

@@ -2,12 +2,13 @@ import React from "react";
 
 import PostContent from "@components/Post/Content";
 import PostMetadata from "@components/Post/Metadata";
+import PostAttachment from "@components/Post/Attachment";
+import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
 import { Body, Card, ModalRoot, Root, ThumbnailWrapper } from "@components/Post/index.styles";
 
 import { ThreadPost } from "@utils/types";
 import { ModalHelper } from "@utils/modal-helper";
-import PostAttachment from "@components/Post/Attachment";
 
 export interface PostProps {
     post: ThreadPost;
@@ -17,13 +18,21 @@ export interface PostStates {
     expanded: boolean;
 }
 
-export default class Post extends React.Component<PostProps, PostStates> {
+class Post extends React.PureComponent<PostProps & WithThreadProps, PostStates> {
     private lastDOM: HTMLDivElement | null = null;
 
     public state: PostStates = {
         expanded: false,
     };
 
+    private handleCardRef = (dom: HTMLDivElement | null) => {
+        if (!dom) {
+            this.props.unregisterDOMObject(this.props.post.id);
+            return;
+        }
+
+        this.props.registerDOMObject(this.props.post.id, dom);
+    };
     private handleModalRef = (dom?: HTMLDivElement | null) => {
         if (!dom) {
             if (this.lastDOM) {
@@ -48,7 +57,7 @@ export default class Post extends React.Component<PostProps, PostStates> {
         const { expanded } = this.state;
 
         const content = (
-            <Card variant="outlined">
+            <Card ref={modal ? undefined : this.handleCardRef} id={!modal ? `p${post.id}` : undefined} variant="outlined">
                 <Root>
                     <PostMetadata post={post} />
                     <Body expanded={expanded}>
@@ -70,3 +79,5 @@ export default class Post extends React.Component<PostProps, PostStates> {
         return content;
     }
 }
+
+export default withThread(Post);

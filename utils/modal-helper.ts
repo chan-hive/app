@@ -35,8 +35,6 @@ export class ModalHelper {
         const threshold = this.clientWidth / 2;
         const marginX = Math.min((this.mouseX <= threshold ? this.mouseX : this.clientWidth - this.mouseX) + 45, this.clientWidth - width);
 
-        console.info(this.mouseX, this.mouseY);
-
         return [marginX, top, this.mouseX > threshold];
     };
 

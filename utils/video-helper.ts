@@ -29,7 +29,6 @@ export class VideoHelper {
         const currentTime = Math.max(...elements.map(e => e.currentTime));
 
         this.lastTimes.set(target, currentTime);
-        console.info("saved", target, currentTime);
     };
     public addElement = (file: FileInformation | number, element: HTMLVideoElement) => {
         const target = typeof file === "number" ? file : file.id;
@@ -37,7 +36,6 @@ export class VideoHelper {
         if (lastTime) {
             // eslint-disable-next-line no-param-reassign
             element.currentTime = lastTime;
-            console.info("loaded", target, lastTime);
         }
 
         if (!this.elements.has(target)) {

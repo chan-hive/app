@@ -45,6 +45,9 @@ class PostContent extends React.PureComponent<PostContentProps, PostContentState
     };
     public render() {
         const { content } = this.props;
+        if (content.length <= 0) {
+            return null;
+        }
 
         return <Root>{content.map(this.renderLine)}</Root>;
     }

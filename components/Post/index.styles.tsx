@@ -9,12 +9,18 @@ export const Root = styled.div`
     padding: ${({ theme }) => theme.spacing(2)};
 `;
 
-export const Body = styled.div`
-    display: flex;
+export const Body = styled.div<{ expanded: boolean }>`
+    display: ${({ expanded }) => (expanded ? "block" : "flex")};
 `;
 
-export const ThumbnailWrapper = styled.div`
-    margin-right: ${({ theme }) => theme.spacing(2)};
+export const ThumbnailWrapper = styled.div<{ expanded: boolean }>`
+    max-width: 100%;
+
+    margin-right: ${({ theme, expanded }) => theme.spacing(expanded ? 0 : 2)};
+
+    &:not(:last-child) {
+        margin-bottom: ${({ theme, expanded }) => theme.spacing(expanded ? 2 : 0)};
+    }
 `;
 
 export const ModalRoot = styled.div`

@@ -34,6 +34,7 @@ class Thumbnail extends React.Component<ThumbnailProps & WithStateProps<RecoilSt
     }
     public componentWillUnmount() {
         ThumbnailHelper.instance.unsubscribe(this.props.file);
+        this.handleMouseOut();
     }
 
     public handleMouseOver = () => {

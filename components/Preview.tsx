@@ -28,11 +28,6 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
         this.clientWidth = document.documentElement.clientWidth;
         this.clientHeight = document.documentElement.clientHeight;
     }
-    public componentDidUpdate(prevProps: Readonly<PreviewProps & WithStateProps<RecoilStateValue<typeof previewState>>>) {
-        if (prevProps.state !== this.props.state && !this.props.state && prevProps.state) {
-            VideoHelper.instance.removeElement(prevProps.state);
-        }
-    }
     public componentWillUnmount() {
         this.isUnmounted = true;
         VideoHelper.instance.removeAllElement();
@@ -87,8 +82,14 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
         this.mouseY = e.clientY;
     };
     public handleMediaRef = (element: HTMLImageElement | HTMLVideoElement | null) => {
-        if (element instanceof HTMLVideoElement && this.props.state) {
-            VideoHelper.instance.addElement(this.props.state, element);
+        if (this.props.state) {
+            if (element instanceof HTMLVideoElement) {
+                VideoHelper.instance.addElement(this.props.state, element);
+            } else if (!element && this.domElement instanceof HTMLVideoElement) {
+                VideoHelper.instance.removeElement(this.props.state, this.domElement);
+            }
+        } else if (!element && this.domElement instanceof HTMLVideoElement) {
+            VideoHelper.instance.removeDOMElement(this.domElement);
         }
 
         this.domElement = element;

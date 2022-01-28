@@ -56,7 +56,7 @@ export default class ThreadCard extends React.Component<ThreadCardProps, ThreadC
                 <ThumbnailWrapper>
                     {file && (
                         <Thumbnail
-                            mosaic={thread.board.id !== "wsg"}
+                            mosaic={!thread.board.isWorkSafe}
                             file={file}
                             size={THUMBNAIL_SIZE}
                             href="/[boardId]/thread/[threadId]"

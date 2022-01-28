@@ -5,6 +5,7 @@ query threadList($count: Int!, $before: DateTime) {
         board {
             id
             title
+            isWorkSafe
         }
         postCount
         fileCount

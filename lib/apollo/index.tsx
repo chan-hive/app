@@ -32,7 +32,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
     };
 
     const {
-        serverRuntimeConfig: { NEXT_PUBLIC_GRAPHQL_URI, NEXT_PUBLIC_WS_GRAPHQL_URI },
+        publicRuntimeConfig: { NEXT_PUBLIC_GRAPHQL_URI, NEXT_PUBLIC_WS_GRAPHQL_URI },
     }: { [key: string]: any } = getConfig();
     const uri: string = process.env.API_ENTRYPOINT || process.env.NEXT_PUBLIC_GRAPHQL_URI || NEXT_PUBLIC_GRAPHQL_URI;
     const wsUri: string = process.env.API_WS_ENTRYPOINT || process.env.NEXT_PUBLIC_WS_GRAPHQL_URI || NEXT_PUBLIC_WS_GRAPHQL_URI;

@@ -42,7 +42,7 @@ export const Content = styled(Typography)`
 
     transition: color 0.15s ease;
 
-    &:first-child {
+    &:first-of-type {
         padding-top: 0;
     }
 `;

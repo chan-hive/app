@@ -22,7 +22,7 @@ export const Card = styled(MuiCard)`
         border-radius: 0;
     }
 
-    &:not(:first-child) {
+    &:not(:first-of-type) {
         ${BodyWrapper} {
             ${Mobile} {
                 border-top: 1px solid #eaeef3;

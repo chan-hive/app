@@ -32,7 +32,7 @@ export default class ThreadRoute extends React.Component<ThreadRouteProps, Threa
             thread,
             posts: thread.posts.map<ThreadPost>(p => ({
                 ...p,
-                content: p.content ? parsePostContent(p.content, p.id) : [],
+                content: p.content ? parsePostContent(p.content, p.id, thread.id) : [],
             })),
         });
     };

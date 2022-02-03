@@ -1,6 +1,7 @@
 export interface QuoteLinkPostContent {
     type: "quotelink";
     postId: number;
+    isOP: boolean;
 }
 export interface QuotePostContent {
     type: "quote";
@@ -16,7 +17,7 @@ export type PostContent = PostContentItem[][];
 
 export const PostContentCache: { [postId: number]: PostContent } = {};
 
-export function parsePostContent(content: string, postId: number): PostContent {
+export function parsePostContent(content: string, postId: number, threadId: number): PostContent {
     if (postId in PostContentCache) {
         return PostContentCache[postId];
     }
@@ -57,9 +58,11 @@ export function parsePostContent(content: string, postId: number): PostContent {
                     content: node.textContent!,
                 });
             } else if (node.tagName === "A" && node.classList.contains("quotelink")) {
+                const targetId = parseInt(node.textContent!.replace(">>", ""), 10);
                 lastLine.push({
                     type: "quotelink",
-                    postId: parseInt(node.textContent!.replace(">>", ""), 10),
+                    postId: targetId,
+                    isOP: targetId === threadId,
                 });
             }
         }

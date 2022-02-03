@@ -27,7 +27,7 @@ export default function ThreadListLoader() {
     }
 
     return (
-        <Grid container spacing={2} alignItems="stretch">
+        <Grid container spacing={2} alignItems="stretch" sx={{ marginTop: theme => theme.spacing(1) }}>
             {EMPTY_ARRAYS[columnCount - 1].map((_, index) => (
                 <Grid key={+index} item xs={12} sm={6} md={6} lg={3}>
                     <ThreadCard />

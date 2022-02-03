@@ -26,12 +26,9 @@ class PostQuoteLink extends React.PureComponent<PostQuoteLinkProps & WithThreadP
         const { item } = this.props;
 
         return (
-            <Root
-                href={`#p${item.postId}`}
-                onClick={this.handleClick}
-                onMouseOver={this.handleMouseOver}
-                onMouseOut={this.handleMouseOut}
-            >{`>>${item.postId}`}</Root>
+            <Root href={`#p${item.postId}`} onClick={this.handleClick} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+                {`>>${item.postId}${item.isOP ? ` (OP)` : ""}`}
+            </Root>
         );
     }
 }

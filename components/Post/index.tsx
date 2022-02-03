@@ -5,10 +5,11 @@ import PostMetadata from "@components/Post/Metadata";
 import PostAttachment from "@components/Post/Attachment";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Body, Card, ModalRoot, Root, ThumbnailWrapper } from "@components/Post/index.styles";
+import { Body, BodyWrapper, Card, ModalRoot, Root, ThumbnailButton, ThumbnailWrapper } from "@components/Post/index.styles";
+import { DesktopOnly, MobileOnly } from "@styles/utils";
 
-import { ThreadPost } from "@utils/types";
 import { ModalHelper } from "@utils/modal-helper";
+import { ThreadPost } from "@utils/types";
 
 export interface PostProps {
     post: ThreadPost;
@@ -55,19 +56,27 @@ class Post extends React.PureComponent<PostProps & WithThreadProps, PostStates> 
     public render() {
         const { post, modal } = this.props;
         const { expanded } = this.state;
-
         const content = (
             <Card ref={modal ? undefined : this.handleCardRef} id={!modal ? `p${post.id}` : undefined} variant="outlined">
                 <Root>
-                    <PostMetadata post={post} />
-                    <Body expanded={expanded}>
-                        {post.file && (
-                            <ThumbnailWrapper expanded={expanded}>
-                                <PostAttachment onExpandedStateChange={this.handleExpandedStateChange} file={post.file} />
-                            </ThumbnailWrapper>
-                        )}
-                        <PostContent post={post} content={post.content} />
-                    </Body>
+                    {post.file && (
+                        <MobileOnly>
+                            <ThumbnailButton style={{ backgroundImage: `url(${post.file.thumbnailUrl})` }} />
+                        </MobileOnly>
+                    )}
+                    <BodyWrapper>
+                        <PostMetadata post={post} />
+                        <Body expanded={expanded}>
+                            {post.file && (
+                                <DesktopOnly>
+                                    <ThumbnailWrapper expanded={expanded}>
+                                        <PostAttachment onExpandedStateChange={this.handleExpandedStateChange} file={post.file} />
+                                    </ThumbnailWrapper>
+                                </DesktopOnly>
+                            )}
+                            <PostContent post={post} content={post.content} />
+                        </Body>
+                    </BodyWrapper>
                 </Root>
             </Card>
         );

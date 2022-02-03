@@ -12,6 +12,7 @@ import { GlobalStyle, Main, Root } from "@components/Layout.styles";
 export interface LayoutProps {
     children: React.ReactNode;
     title?: string | null;
+    withoutPadding?: boolean;
 }
 export interface LayoutStates {
     appBarHeight: number;
@@ -37,14 +38,14 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
     };
 
     public render() {
-        const { children, title } = this.props;
+        const { children, title, withoutPadding } = this.props;
         const { appBarHeight } = this.state;
 
         return (
             <LayoutContext.Provider value={{ appBarHeight }}>
                 <Global styles={GlobalStyle} />
                 <Header title={title} onAppBarHeightChange={this.handleAppBarHeightChange} />
-                <Root>
+                <Root withoutPadding={withoutPadding}>
                     <Drawer />
                     <Main>
                         <Toolbar />

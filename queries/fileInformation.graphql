@@ -9,4 +9,5 @@ fragment FileInformation on File {
     url
     thumbnailUrl
     uploadedTimestamp
+    size
 }

@@ -10,7 +10,7 @@ import { ThreadInformationDocument, ThreadInformationQuery, ThreadInformationQue
 
 const Thread: NextPage<ThreadRouteProps> = ({ threadId, boardId, thread }) => {
     return (
-        <Layout title={`/${boardId}/ - ${thread.opPost.title || `Thread #${thread.id}`}`}>
+        <Layout withoutPadding title={`/${boardId}/ - ${thread.opPost.title || `Thread #${thread.id}`}`}>
             <ThreadRoute threadId={threadId} boardId={boardId} thread={thread} />
         </Layout>
     );

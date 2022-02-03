@@ -11,5 +11,7 @@ export const Logo = styled(LogoComponent)`
 
     margin: 0 ${({ theme }) => theme.spacing(2.5)} 0 0;
 
+    flex: 0 0 32px;
+
     display: block;
 `;

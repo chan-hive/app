@@ -17,9 +17,9 @@ export const GlobalStyle = css`
     }
 `;
 
-export const Root = styled.div`
+export const Root = styled.div<{ withoutPadding?: boolean }>`
     margin: 0 auto;
-    padding: ${({ theme }) => theme.spacing(2, 0)};
+    padding: ${({ theme, withoutPadding }) => (withoutPadding ? 0 : theme.spacing(2, 0))};
 `;
 
 export const Main = styled.main`

@@ -1,17 +1,15 @@
 import React from "react";
 
-import { Container } from "@mui/material";
-
 import Post from "@components/Post";
+import ThreadProvider from "@components/Thread/ThreadProvider";
 
-import { Root } from "@routes/Thread.styles";
+import { Root, WidthWrapper } from "@routes/Thread.styles";
 
 import { ThreadInformationQuery, ThreadWithPostsComponent, ThreadWithPostsQuery } from "@query";
 
 import { reactNoop } from "@utils/noop";
 import { ThreadPost, ThreadWithPosts } from "@utils/types";
 import { parsePostContent } from "@utils/parsePostContent";
-import ThreadProvider from "@components/Thread/ThreadProvider";
 
 export interface ThreadRouteProps {
     threadId: number;
@@ -45,6 +43,7 @@ export default class ThreadRoute extends React.Component<ThreadRouteProps, Threa
     public render() {
         const { threadId, boardId } = this.props;
         const { posts, thread } = this.state;
+        const content = posts && thread && posts.map(this.renderPost);
 
         return (
             <Root>
@@ -53,7 +52,7 @@ export default class ThreadRoute extends React.Component<ThreadRouteProps, Threa
                 </ThreadWithPostsComponent>
                 {posts && thread && (
                     <ThreadProvider posts={posts} thread={thread}>
-                        <Container>{posts.map(this.renderPost)}</Container>
+                        <WidthWrapper>{content}</WidthWrapper>
                     </ThreadProvider>
                 )}
             </Root>

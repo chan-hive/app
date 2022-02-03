@@ -33,8 +33,10 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
                 sx={{ background: "rgb(255, 255, 255)", boxShadow: "inset 0px -1px 1px #eaeef3", zIndex: theme => theme.zIndex.drawer + 1 }}
             >
                 <Toolbar>
-                    <Logo />
-                    <Typography variant="h5" fontWeight="500">
+                    <Hidden smDown>
+                        <Logo />
+                    </Hidden>
+                    <Typography variant="h6" fontWeight="500" noWrap>
                         {title || "Chanhive"}
                     </Typography>
                 </Toolbar>

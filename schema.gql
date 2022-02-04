@@ -7,6 +7,7 @@ type Board {
   title: String!
   isWorkSafe: Boolean!
   threads: [Thread!]!
+  threadCount: Int!
 }
 
 type Thread {
@@ -55,9 +56,9 @@ type File {
 type Query {
   board(id: String!): Board
   boards: [Board!]!
-  threadCount: Int!
+  threadCount(boardId: String): Int!
   thread(threadId: Int!, boardId: String!): Thread!
-  threads(before: DateTime, count: Int!): [Thread!]!
+  threads(before: DateTime, count: Int!, boardId: String): [Thread!]!
 }
 
 type Mutation {

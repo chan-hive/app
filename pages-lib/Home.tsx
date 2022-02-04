@@ -15,8 +15,11 @@ import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQue
 
 import { reactNoop } from "@utils/noop";
 import { ThreadListItem } from "@utils/types";
+import { DesktopOnly, MobileOnly } from "@styles/utils";
 
-interface HomeRouteProps {}
+interface HomeRouteProps {
+    boardId?: string;
+}
 interface HomeRouteStates {
     threads: ThreadListItem[] | null;
     threadCount: number | null;
@@ -32,15 +35,28 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
         hasMore: true,
     };
 
+    public componentDidUpdate(prevProps: Readonly<WithApolloClient<HomeRouteProps>>) {
+        if (this.props.boardId !== prevProps.boardId) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
+                threads: null,
+                threadCount: null,
+                hasMore: true,
+            });
+        }
+    }
+
     private handleQueryCompleted = ({ threads, threadCount }: ThreadListQuery) => {
         this.setState({
             threads,
             threadCount,
+            hasMore: threads.length >= 16 && threadCount >= 16,
         });
     };
 
     private handleFetch = async () => {
         const { threads } = this.state;
+        const { boardId } = this.props;
         if (!this.props.client) {
             throw new Error("Couldn't find an instance of Apollo Client.");
         }
@@ -50,6 +66,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
             variables: {
                 count: 16,
                 before: threads && threads.length > 0 ? threads[threads.length - 1].createdAt : undefined,
+                boardId,
             },
         });
 
@@ -103,6 +120,7 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
         );
     };
     public render() {
+        const { boardId } = this.props;
         const content = this.renderContent();
 
         return (
@@ -110,11 +128,14 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
                 <Head>
                     <title>Chanhive</title>
                 </Head>
-                <ThreadListComponent variables={{ count: 16 }} onCompleted={this.handleQueryCompleted}>
+                <ThreadListComponent variables={{ count: 16, boardId }} onCompleted={this.handleQueryCompleted}>
                     {reactNoop}
                 </ThreadListComponent>
                 <Root>
-                    <Container>{content}</Container>
+                    <DesktopOnly>
+                        <Container>{content}</Container>
+                    </DesktopOnly>
+                    <MobileOnly>{content}</MobileOnly>
                 </Root>
             </>
         );

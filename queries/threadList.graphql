@@ -1,6 +1,6 @@
-query threadList($count: Int!, $before: DateTime) {
+query threadList($boardId: String, $count: Int!, $before: DateTime) {
     threadCount
-    threads(count: $count, before: $before) {
+    threads(boardId: $boardId, count: $count, before: $before) {
         id
         board {
             id

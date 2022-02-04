@@ -2,5 +2,6 @@ query boards {
     boards {
         id
         title
+        threadCount
     }
 }

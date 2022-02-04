@@ -6,8 +6,10 @@ type Board {
   id: String!
   title: String!
   isWorkSafe: Boolean!
-  threads: [Thread!]!
+  description: String!
+  threads(count: Int): [Thread!]!
   threadCount: Int!
+  latestThread: Thread
 }
 
 type Thread {

@@ -1,4 +1,4 @@
-import type { BoardsQuery, FileInformationFragment, ThreadListQuery, ThreadWithPostsQuery } from "@query";
+import type { BoardListQuery, BoardsQuery, FileInformationFragment, ThreadListQuery, ThreadWithPostsQuery } from "@query";
 import type { RecoilState } from "recoil";
 import type { PostContent } from "@utils/parsePostContent";
 
@@ -10,3 +10,4 @@ export type ThreadWithPosts = Exclude<ThreadWithPostsQuery["thread"], null | und
 export type RawThreadPost = ThreadWithPosts["posts"][0];
 export type ThreadPost = Omit<RawThreadPost, "content"> & { content: PostContent };
 export type Board = BoardsQuery["boards"][0];
+export type BoardListItem = BoardListQuery["boards"][0];

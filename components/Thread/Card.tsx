@@ -1,101 +1,76 @@
 /* eslint-disable react/no-danger */
 import React from "react";
-import Link from "next/link";
 
 import { Skeleton } from "@mui/material";
 import ForumIcon from "@mui/icons-material/Forum";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 
-import Thumbnail from "@components/Thumbnail";
+import Card from "@components/UI/Card";
+import CardFooterItem from "@components/UI/CardFooterItem";
 
-import { BoardName, Body, Content, Footer, FooterItemValue, Item, Metadata, Root, ThumbnailWrapper, Title } from "@components/Thread/Card.styles";
+import { BoardName } from "@components/Thread/Card.styles";
 
-import { ThreadListItem } from "@utils/types";
 import { Placeholder } from "@styles/placeholder";
+import { ThreadListItem } from "@utils/types";
 
 export interface ThreadCardProps {
     thread?: ThreadListItem;
 }
 export interface ThreadCardStates {}
 
-const THUMBNAIL_SIZE = { width: "100%", height: 145 };
-
 export default class ThreadCard extends React.Component<ThreadCardProps, ThreadCardStates> {
-    private renderSkeleton = () => {
+    private renderMetadata = () => {
+        const { thread } = this.props;
+
+        return <BoardName variant="body1">{thread!.board.title}</BoardName>;
+    };
+    private renderFooter = () => {
+        const { thread } = this.props;
+
         return (
-            <Root skeleton>
-                <ThumbnailWrapper>
-                    <Skeleton animation="wave" variant="rectangular" width="100%" height={145} />
-                </ThumbnailWrapper>
-                <Body>
-                    <Title variant="h6">
-                        <Skeleton animation="wave" />
-                    </Title>
-                    <Content variant="body1">
-                        <Skeleton animation="wave" />
-                        <Skeleton width="65%" animation="wave" />
-                    </Content>
-                </Body>
-                <Metadata>
-                    <BoardName variant="body1">
-                        <Skeleton animation="wave" width="25%" />
-                    </BoardName>
-                </Metadata>
-                <Footer>
-                    <Placeholder />
-                    <Skeleton animation="wave" width="50%" />
-                </Footer>
-            </Root>
+            <>
+                <Placeholder />
+                <CardFooterItem icon={ForumIcon}>{thread!.postCount}</CardFooterItem>
+                <CardFooterItem icon={PermMediaIcon}>{thread!.fileCount}</CardFooterItem>
+            </>
         );
     };
-    private renderContent = (thread: ThreadListItem) => {
-        const { file } = thread.opPost;
 
+    private renderFooterSkeleton = () => {
         return (
-            <Root>
-                <ThumbnailWrapper>
-                    {file && (
-                        <Thumbnail
-                            mosaic={!thread.board.isWorkSafe}
-                            file={file}
-                            size={THUMBNAIL_SIZE}
-                            href="/[boardId]/thread/[threadId]"
-                            as={`/${thread.board.id}/thread/${thread.id}`}
-                        />
-                    )}
-                </ThumbnailWrapper>
-                <Link href="/[boardId]/thread/[threadId]" as={`/${thread.board.id}/thread/${thread.id}`} passHref>
-                    <Body>
-                        <Title variant="h6">{thread.opPost.title || `Thread #${thread.id}`}</Title>
-                        <Content variant="body1">
-                            <span dangerouslySetInnerHTML={{ __html: thread.opPost.content || "" }} />
-                        </Content>
-                    </Body>
-                </Link>
-                <Metadata>
-                    <BoardName variant="body1">{thread.board.title}</BoardName>
-                </Metadata>
-                <Footer>
-                    <Placeholder />
-                    <Item>
-                        <ForumIcon />
-                        <FooterItemValue variant="body1">{thread.postCount}</FooterItemValue>
-                    </Item>
-                    <Item>
-                        <PermMediaIcon />
-                        <FooterItemValue variant="body1">{thread.fileCount}</FooterItemValue>
-                    </Item>
-                </Footer>
-            </Root>
+            <>
+                <Placeholder />
+                <Skeleton animation="wave" width="50%" />
+            </>
+        );
+    };
+    private renderMetadataSkeleton = () => {
+        return (
+            <>
+                <Skeleton animation="wave" width="25%" />
+            </>
         );
     };
 
     public render() {
         const { thread } = this.props;
         if (!thread) {
-            return this.renderSkeleton();
+            return <Card skeleton renderFooter={this.renderFooterSkeleton} renderMetadata={this.renderMetadataSkeleton} />;
         }
 
-        return this.renderContent(thread);
+        return (
+            <Card
+                title={thread.opPost.title}
+                content={thread.opPost.content}
+                href="/[boardId]/thread/[threadId]"
+                thumbnail={{
+                    file: thread.opPost.file,
+                    mosaic: !thread.board.isWorkSafe,
+                }}
+                as={`/${thread.board.id}/thread/${thread.id}`}
+                renderFooter={this.renderFooter}
+                renderMetadata={this.renderMetadata}
+            />
+        );
     }
 }

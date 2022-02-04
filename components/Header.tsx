@@ -37,7 +37,7 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
                         <Logo />
                     </Hidden>
                     <Typography variant="h6" fontWeight="500" noWrap>
-                        {title || "Chanhive"}
+                        {title ? `${title} - Chanhive` : "Chanhive"}
                     </Typography>
                 </Toolbar>
             </AppBar>

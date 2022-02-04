@@ -1,0 +1,18 @@
+query boardList {
+    boards {
+        id
+        title
+        threadCount
+        description
+        isWorkSafe
+        latestThread {
+            id
+            opPost {
+                id
+                file {
+                    ...FileInformation
+                }
+            }
+        }
+    }
+}

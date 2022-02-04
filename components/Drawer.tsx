@@ -5,20 +5,7 @@ import { WithRouterProps } from "next/dist/client/with-router";
 
 import { SxProps } from "@mui/system";
 
-import {
-    Divider,
-    Drawer as MuiDrawer,
-    Hidden,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    ListSubheader,
-    Theme,
-    Toolbar,
-    Typography,
-} from "@mui/material";
+import { Divider, Drawer as MuiDrawer, Hidden, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Theme, Toolbar, Typography } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
@@ -59,8 +46,8 @@ class Drawer extends React.PureComponent<DrawerProps & BoardsProps & WithRouterP
             <Root>
                 <Toolbar />
                 <List sx={{ flex: "1 1", width: "100%", bgcolor: "background.paper" }} component="nav">
-                    <Link href="/" passHref>
-                        <ListItem button component="a" selected={router.asPath === "/"}>
+                    <Link href="/boards" passHref>
+                        <ListItem button component="a" selected={router.asPath === "/boards" || router.asPath === "/"}>
                             <ListItemIcon>
                                 <InventoryIcon />
                             </ListItemIcon>
@@ -70,15 +57,17 @@ class Drawer extends React.PureComponent<DrawerProps & BoardsProps & WithRouterP
                             </Typography>
                         </ListItem>
                     </Link>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <QuestionAnswerIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Threads" />
-                        <Typography variant="body2" sx={{ color: "rgba(0, 0, 0, 0.5)" }}>
-                            {allThreadCount}
-                        </Typography>
-                    </ListItemButton>
+                    <Link href="/threads" passHref>
+                        <ListItem button component="a" selected={router.asPath === "/threads"}>
+                            <ListItemIcon>
+                                <QuestionAnswerIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Threads" />
+                            <Typography variant="body2" sx={{ color: "rgba(0, 0, 0, 0.5)" }}>
+                                {allThreadCount}
+                            </Typography>
+                        </ListItem>
+                    </Link>
                 </List>
                 <Divider />
                 <List

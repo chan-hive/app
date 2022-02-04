@@ -1,6 +1,5 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Head from "next/head";
 
 import { withApollo, WithApolloClient } from "@apollo/client/react/hoc";
 
@@ -9,7 +8,7 @@ import { Container, Grid } from "@mui/material";
 import ThreadListLoader from "@components/Thread/ListLoader";
 import ThreadCard from "@components/Thread/Card";
 
-import { Root, SkeletonContainer } from "@routes/Home.styles";
+import { Root, SkeletonContainer } from "@routes/Threads.styles";
 
 import { ThreadListComponent, ThreadListDocument, ThreadListQuery, ThreadListQueryVariables } from "@query";
 
@@ -28,7 +27,7 @@ interface HomeRouteStates {
 
 const EMPTY_ARRAY = new Array(16).fill(null);
 
-class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRouteStates> {
+class ThreadsRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRouteStates> {
     public state: HomeRouteStates = {
         threads: null,
         threadCount: null,
@@ -125,9 +124,6 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
 
         return (
             <>
-                <Head>
-                    <title>Chanhive</title>
-                </Head>
                 <ThreadListComponent variables={{ count: 16, boardId }} onCompleted={this.handleQueryCompleted}>
                     {reactNoop}
                 </ThreadListComponent>
@@ -142,4 +138,4 @@ class HomeRoute extends React.Component<WithApolloClient<HomeRouteProps>, HomeRo
     }
 }
 
-export default withApollo<HomeRouteProps>(HomeRoute);
+export default withApollo<HomeRouteProps>(ThreadsRoute);

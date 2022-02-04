@@ -2,12 +2,12 @@ import type { NextPage } from "next";
 
 import Layout from "@components/Layout";
 
-import HomeRoute from "@routes/Home";
+import BoardsRoute from "@routes/Boards";
 
 const Home: NextPage = () => {
     return (
         <Layout>
-            <HomeRoute />
+            <BoardsRoute />
         </Layout>
     );
 };

@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
 
-import Layout from "@components/Layout";
-
 import ThreadRoute, { ThreadRouteProps } from "@routes/Thread";
 
 import { initializeApollo } from "@lib/apollo";
@@ -13,11 +11,7 @@ import { BasePageProps } from "@utils/types";
 export interface ThreadPageProps extends ThreadRouteProps, BasePageProps {}
 
 const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId, thread }) => {
-    return (
-        <Layout withoutPadding title={`/${boardId}/ - ${thread.opPost.title || `Thread #${thread.id}`}`}>
-            <ThreadRoute threadId={threadId} boardId={boardId} thread={thread} />
-        </Layout>
-    );
+    return <ThreadRoute threadId={threadId} boardId={boardId} thread={thread} />;
 };
 
 Thread.getInitialProps = async ({ query, req }) => {
@@ -51,6 +45,7 @@ Thread.getInitialProps = async ({ query, req }) => {
         thread: data.thread,
         layoutProps: {
             title: `/${query.boardId}/ - ${data.thread.opPost.title || `Thread #${data.thread.id}`}`,
+            withoutPadding: true,
         },
     };
 };

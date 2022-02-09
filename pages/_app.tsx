@@ -1,4 +1,4 @@
-import App, { AppContext, AppProps } from "next/app";
+import App, { AppContext } from "next/app";
 import { RecoilRoot } from "recoil";
 
 import { ThemeProvider } from "@mui/material";
@@ -16,6 +16,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import "@fontsource/roboto-mono/400.css";
+import { AppProps } from "@utils/types";
 
 function MyApp({ Component, pageProps }: AppProps) {
     const apolloClient = useApollo(pageProps);
@@ -24,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ApolloProvider client={apolloClient}>
             <ThemeProvider theme={theme}>
                 <RecoilRoot>
-                    <Layout>
+                    <Layout {...pageProps.layoutProps}>
                         <Component {...pageProps} />
                     </Layout>
                 </RecoilRoot>
@@ -35,6 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
     const appProps = await App.getInitialProps(appContext);
+
     return { ...appProps };
 };
 

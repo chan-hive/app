@@ -1,4 +1,5 @@
 import type { BoardListQuery, BoardsQuery, FileInformationFragment, ThreadListQuery, ThreadWithPostsQuery } from "@query";
+import type { AppProps as NextAppProps } from "next/app";
 import type { RecoilState } from "recoil";
 import type { LayoutProps } from "@components/Layout";
 import type { PostContent } from "@utils/parsePostContent";
@@ -15,4 +16,9 @@ export type BoardListItem = BoardListQuery["boards"][0];
 
 export interface BasePageProps {
     layoutProps?: Omit<LayoutProps, "children">;
+}
+
+export interface AppProps extends Omit<NextAppProps, "pageProps" | "Component"> {
+    pageProps: BasePageProps;
+    Component: React.ComponentType<any>;
 }

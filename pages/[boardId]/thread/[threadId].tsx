@@ -8,7 +8,11 @@ import { initializeApollo } from "@lib/apollo";
 
 import { ThreadInformationDocument, ThreadInformationQuery, ThreadInformationQueryVariables } from "@query";
 
-const Thread: NextPage<ThreadRouteProps> = ({ threadId, boardId, thread }) => {
+import { BasePageProps } from "@utils/types";
+
+export interface ThreadPageProps extends ThreadRouteProps, BasePageProps {}
+
+const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId, thread }) => {
     return (
         <Layout withoutPadding title={`/${boardId}/ - ${thread.opPost.title || `Thread #${thread.id}`}`}>
             <ThreadRoute threadId={threadId} boardId={boardId} thread={thread} />
@@ -45,6 +49,9 @@ Thread.getInitialProps = async ({ query, req }) => {
         threadId: parseInt(query.threadId, 10),
         boardId: query.boardId,
         thread: data.thread,
+        layoutProps: {
+            title: `/${query.boardId}/ - ${data.thread.opPost.title || `Thread #${data.thread.id}`}`,
+        },
     };
 };
 

@@ -1,15 +1,18 @@
 import type { NextPage } from "next";
 
-import Layout from "@components/Layout";
-
 import BoardsRoute, { BoardsRouteProps } from "@routes/Boards";
+import { BasePageProps } from "@utils/types";
 
-const Boards: NextPage<BoardsRouteProps> = () => {
-    return (
-        <Layout title="Boards">
-            <BoardsRoute />
-        </Layout>
-    );
+export interface BoardsPageProps extends BoardsRouteProps, BasePageProps {}
+
+const Boards: NextPage<BoardsPageProps> = () => {
+    return <BoardsRoute />;
 };
+
+Boards.getInitialProps = async () => ({
+    layoutProps: {
+        title: "Boards",
+    },
+});
 
 export default Boards;

@@ -6,6 +6,8 @@ import { ThemeProvider } from "@mui/material";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@lib/apollo";
 
+import Layout from "@components/Layout";
+
 import { theme } from "@styles/theme";
 
 import "@fontsource/roboto/300.css";
@@ -22,7 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ApolloProvider client={apolloClient}>
             <ThemeProvider theme={theme}>
                 <RecoilRoot>
-                    <Component {...pageProps} />
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
                 </RecoilRoot>
             </ThemeProvider>
         </ApolloProvider>

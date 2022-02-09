@@ -31,7 +31,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
     const appProps = await App.getInitialProps(appContext);
-    console.info(":D");
     return { ...appProps };
 };
 

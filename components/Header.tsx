@@ -2,7 +2,8 @@ import React from "react";
 import Measure, { ContentRect, MeasuredComponentProps } from "react-measure";
 import Head from "next/head";
 
-import { AppBar, Hidden, Toolbar, Typography } from "@mui/material";
+import { AppBar, Hidden, IconButton, Toolbar, Typography } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { HideOnScroll } from "@components/HideOnScroll";
 
@@ -26,29 +27,40 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
     private renderContent = ({ measureRef }: MeasuredComponentProps) => {
         const { title } = this.props;
         const content = (
-            <AppBar
-                ref={measureRef}
-                elevation={0}
-                color="transparent"
-                sx={{ background: "rgb(255, 255, 255)", boxShadow: "inset 0px -1px 1px #eaeef3", zIndex: theme => theme.zIndex.drawer + 1 }}
-            >
-                <Toolbar>
-                    <Hidden smDown>
-                        <Logo />
-                    </Hidden>
-                    <Typography variant="h6" fontWeight="500" noWrap>
-                        {title ? `${title} - Chanhive` : "Chanhive"}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <Toolbar>
+                <Hidden mdDown>
+                    <Logo />
+                </Hidden>
+                <Hidden mdUp>
+                    <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </Hidden>
+                <Typography variant="h6" fontWeight="500" noWrap>
+                    {title ? `${title}` : "Chanhive"}
+                </Typography>
+            </Toolbar>
         );
 
         return (
             <>
-                <Hidden smUp>
-                    <HideOnScroll>{content}</HideOnScroll>
+                <Hidden mdDown>
+                    <AppBar
+                        ref={measureRef}
+                        elevation={0}
+                        color="transparent"
+                        sx={{ background: "rgb(255, 255, 255)", boxShadow: "inset 0px -1px 1px #eaeef3", zIndex: theme => theme.zIndex.drawer + 1 }}
+                    >
+                        {content}
+                    </AppBar>
                 </Hidden>
-                <Hidden smDown>{content}</Hidden>
+                <Hidden mdUp>
+                    <HideOnScroll>
+                        <AppBar ref={measureRef} sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
+                            {content}
+                        </AppBar>
+                    </HideOnScroll>
+                </Hidden>
             </>
         );
     };

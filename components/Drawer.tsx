@@ -24,7 +24,7 @@ class Drawer extends React.PureComponent<DrawerProps & BoardsProps & WithRouterP
         const { router } = this.props;
 
         return (
-            <Link href="/boards/[boardId]" as={`/boards/${board.id}`} passHref>
+            <Link key={board.id} href="/boards/[boardId]" as={`/boards/${board.id}`} passHref>
                 <ListItem button component="a" key={board.id} selected={router.asPath === `/boards/${board.id}`}>
                     <ListItemText primary={`/${board.id}/ - ${board.title}`} />
                     <Typography variant="body2" sx={{ color: "rgba(0, 0, 0, 0.5)" }}>

@@ -60,7 +60,7 @@ export default class PostAttachment extends React.Component<PostAttachmentProps,
                         style={{ display: !loaded ? "none" : "block" }}
                     />
                 )}
-                <ThumbnailWrapper loading={expanded && !loaded} style={{ display: expanded && loaded ? "none" : "block" }}>
+                <ThumbnailWrapper isLoading={expanded && !loaded} style={{ display: expanded && loaded ? "none" : "block" }}>
                     <Thumbnail file={file} />
                 </ThumbnailWrapper>
             </>

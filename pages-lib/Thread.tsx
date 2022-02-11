@@ -35,7 +35,7 @@ export default class ThreadRoute extends React.Component<ThreadRouteProps, Threa
     public render() {
         const { threadId, boardId } = this.props;
         const { thread } = this.state;
-        const content = thread && thread.posts.slice(0, 1).map(this.renderPost);
+        const content = thread && thread.posts.slice(0, 15).map(this.renderPost);
 
         return (
             <Root>

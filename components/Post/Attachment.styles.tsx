@@ -10,8 +10,8 @@ export const Root = styled.div`
     cursor: pointer;
 `;
 
-export const ThumbnailWrapper = styled.div<{ loading: boolean }>`
-    opacity: ${({ loading }) => (loading ? 0.5 : 1)};
+export const ThumbnailWrapper = styled.div<{ isLoading: boolean }>`
+    opacity: ${({ isLoading }) => (isLoading ? 0.5 : 1)};
 `;
 
 export const Media = styled(MediaViewer)`

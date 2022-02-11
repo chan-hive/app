@@ -6,40 +6,39 @@ import PostQuoteLink from "@components/Post/QuoteLink";
 
 import { Quote, Root, Text } from "@components/Post/Content.styles";
 
-import { PostContent as PostContentType, PostContentItem, QuoteLinkPostContent, QuotePostContent, TextPostContent } from "@utils/parsePostContent";
-import { ThreadPost } from "@utils/types";
+import { PostContentItem, PostContentRow, QuoteContentItem, QuoteLinkContentItem, TextContentItem, ThreadPost } from "@utils/types";
 
 export interface PostContentProps {
-    content: PostContentType;
+    content: ThreadPost["content"];
     post: ThreadPost;
 }
 export interface PostContentStates {}
 
 class PostContent extends React.PureComponent<PostContentProps, PostContentStates> {
-    private renderText = (item: TextPostContent, key: number) => <Text key={key}>{item.content}</Text>;
-    private renderQuote = (item: QuotePostContent, key: number): JSX.Element => <Quote key={key}>{item.content}</Quote>;
-    private renderQuoteLink = (item: QuoteLinkPostContent, key: number): JSX.Element => {
+    private renderText = (item: TextContentItem, key: number) => <Text key={key}>{item.text}</Text>;
+    private renderQuote = (item: QuoteContentItem, key: number): JSX.Element => <Quote key={key}>{item.quote}</Quote>;
+    private renderQuoteLink = (item: QuoteLinkContentItem, key: number): JSX.Element => {
         return <PostQuoteLink key={key} item={item} />;
     };
     private renderItem = (item: PostContentItem, key: number) => {
-        switch (item.type) {
-            case "quotelink":
+        switch (item.__typename) {
+            case "QuoteLinkContent":
                 return this.renderQuoteLink(item, key);
 
-            case "quote":
+            case "QuoteContent":
                 return this.renderQuote(item, key);
 
-            case "text":
+            case "TextContent":
                 return this.renderText(item, key);
 
             default:
                 return null;
         }
     };
-    private renderLine = (line: PostContentType[0], index: number) => {
+    private renderRow = ({ contents }: PostContentRow, index: number) => {
         return (
             <Typography key={+index} variant="body1">
-                {line.length > 0 ? line.map(this.renderItem) : <React.Fragment key={+index}>&nbsp;</React.Fragment>}
+                {contents.length > 0 ? contents.map(this.renderItem) : <React.Fragment key={+index}>&nbsp;</React.Fragment>}
             </Typography>
         );
     };
@@ -49,7 +48,7 @@ class PostContent extends React.PureComponent<PostContentProps, PostContentState
             return null;
         }
 
-        return <Root>{content.map(this.renderLine)}</Root>;
+        return <Root>{content.map(this.renderRow)}</Root>;
     }
 }
 

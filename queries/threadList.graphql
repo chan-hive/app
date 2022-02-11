@@ -13,7 +13,7 @@ query threadList($boardId: String, $count: Int!, $before: DateTime) {
         opPost {
             id
             title
-            content
+            rawContent
             createdAt
             file {
                 ...FileInformation

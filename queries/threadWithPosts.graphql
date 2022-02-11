@@ -5,7 +5,9 @@ query threadWithPosts($boardId: String!, $threadId: Int!) {
             id
             title
             name
-            content
+            content {
+                ...PostContent
+            }
             isOP
             createdAt
             file {

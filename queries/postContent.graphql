@@ -1,0 +1,20 @@
+fragment PostContent on PostContentRow {
+    contents {
+        __typename
+        ... on QuoteContent {
+            quote
+        }
+        ... on QuoteLinkContent {
+            isOP
+            postId
+        }
+        ... on TextContent {
+            text
+        }
+        ... on CrossThreadQuoteLinkContent {
+            postId
+            isOP
+            board
+        }
+    }
+}

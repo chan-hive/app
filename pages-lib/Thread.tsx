@@ -8,8 +8,6 @@ import { Root, WidthWrapper } from "@routes/Thread.styles";
 import { ThreadInformationQuery, ThreadWithPostsComponent, ThreadWithPostsQuery } from "@query";
 
 import { reactNoop } from "@utils/noop";
-import { ThreadPost, ThreadWithPosts } from "@utils/types";
-import { parsePostContent } from "@utils/parsePostContent";
 
 export interface ThreadRouteProps {
     threadId: number;
@@ -17,41 +15,35 @@ export interface ThreadRouteProps {
     thread: ThreadInformationQuery["thread"];
 }
 export interface ThreadRouteStates {
-    posts: ThreadPost[] | null;
-    thread: ThreadWithPosts | null;
+    thread: ThreadWithPostsQuery["thread"] | null;
 }
 
 export default class ThreadRoute extends React.Component<ThreadRouteProps, ThreadRouteStates> {
     public state: ThreadRouteStates = {
-        posts: null,
         thread: null,
     };
 
     private handleComplete = ({ thread }: ThreadWithPostsQuery) => {
         this.setState({
             thread,
-            posts: thread.posts.map<ThreadPost>(p => ({
-                ...p,
-                content: p.content ? parsePostContent(p.content, p.id, thread.id) : [],
-            })),
         });
     };
 
-    private renderPost = (post: ThreadPost) => {
+    private renderPost = (post: ThreadWithPostsQuery["thread"]["posts"][0]) => {
         return <Post key={post.id} post={post} />;
     };
     public render() {
         const { threadId, boardId } = this.props;
-        const { posts, thread } = this.state;
-        const content = posts && thread && posts.map(this.renderPost);
+        const { thread } = this.state;
+        const content = thread && thread.posts.slice(0, 1).map(this.renderPost);
 
         return (
             <Root>
                 <ThreadWithPostsComponent variables={{ threadId, boardId }} onCompleted={this.handleComplete}>
                     {reactNoop}
                 </ThreadWithPostsComponent>
-                {posts && thread && (
-                    <ThreadProvider posts={posts} thread={thread}>
+                {thread && (
+                    <ThreadProvider posts={thread.posts} thread={thread}>
                         <WidthWrapper>{content}</WidthWrapper>
                     </ThreadProvider>
                 )}

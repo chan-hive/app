@@ -3,10 +3,10 @@ import React from "react";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 import { Root } from "@components/Post/QuoteLink.styles";
 
-import { QuoteLinkPostContent } from "@utils/parsePostContent";
+import { QuoteLinkContentItem } from "@utils/types";
 
 export interface PostQuoteLinkProps {
-    item: QuoteLinkPostContent;
+    item: QuoteLinkContentItem;
 }
 export interface PostQuoteLinkStates {}
 

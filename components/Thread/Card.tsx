@@ -61,7 +61,7 @@ export default class ThreadCard extends React.Component<ThreadCardProps, ThreadC
         return (
             <Card
                 title={thread.opPost.title}
-                content={thread.opPost.content}
+                content={thread.opPost.rawContent}
                 href="/[boardId]/thread/[threadId]"
                 thumbnail={{
                     file: thread.opPost.file,

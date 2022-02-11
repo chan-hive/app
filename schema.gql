@@ -2,6 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PostContentRow {
+  contents: [PostContent!]!
+}
+
+union PostContent = TextContent | QuoteContent | QuoteLinkContent | CrossThreadQuoteLinkContent
+
+type TextContent {
+  text: String!
+}
+
+type QuoteContent {
+  quote: String!
+}
+
+type QuoteLinkContent {
+  postId: Int!
+  isOP: Boolean!
+}
+
+type CrossThreadQuoteLinkContent {
+  postId: Int!
+  isOP: Boolean!
+  board: String!
+}
+
 type Board {
   id: String!
   title: String!
@@ -32,7 +57,8 @@ type Post {
   id: Int!
   name: String!
   title: String
-  content: String
+  content: [PostContentRow!]!
+  rawContent: String
   isOP: Boolean!
   createdAt: DateTime!
   file: File

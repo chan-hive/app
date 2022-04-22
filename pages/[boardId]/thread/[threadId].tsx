@@ -10,8 +10,8 @@ import { BasePageProps } from "@utils/types";
 
 export interface ThreadPageProps extends ThreadRouteProps, BasePageProps {}
 
-const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId, thread }) => {
-    return <ThreadRoute threadId={threadId} boardId={boardId} thread={thread} />;
+const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId, thread, postCount }) => {
+    return <ThreadRoute postCount={postCount} threadId={threadId} boardId={boardId} thread={thread} />;
 };
 
 Thread.getInitialProps = async ({ query, req }) => {
@@ -42,6 +42,7 @@ Thread.getInitialProps = async ({ query, req }) => {
     return {
         threadId: parseInt(query.threadId, 10),
         boardId: query.boardId,
+        postCount: data.thread.postCount,
         thread: data.thread,
         layoutProps: {
             title: `/${query.boardId}/ - ${data.thread.opPost.title || `Thread #${data.thread.id}`}`,

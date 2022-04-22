@@ -1,6 +1,7 @@
 query threadInformation($boardId: String!, $threadId: Int!) {
     thread(threadId: $threadId, boardId: $boardId) {
         id
+        postCount
         board {
             id
             title

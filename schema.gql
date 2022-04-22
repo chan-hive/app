@@ -66,6 +66,7 @@ type Post {
 
 type File {
   id: Int!
+  mime: String!
   name: String!
   extension: String!
   md5: String!
@@ -76,9 +77,10 @@ type File {
   thumbnailHeight: Int!
   uploadedTimestamp: Float!
   isArchived: Boolean!
-  isImage: Boolean!
   url: String!
   thumbnailUrl: String!
+  isImage: Boolean!
+  isVideo: Boolean!
 }
 
 type Query {

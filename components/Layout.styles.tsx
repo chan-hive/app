@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 import { DRAWER_WIDTH } from "@constants/layout";
+import { NO_SCROLL_CLASSNAME } from "@components/UI/PreventBodyScroll";
 
 export const GlobalStyle = css`
     body,
@@ -14,6 +15,10 @@ export const GlobalStyle = css`
 
     .infinite-scroll-component {
         overflow: visible !important;
+    }
+
+    .${NO_SCROLL_CLASSNAME} {
+        overflow-y: hidden;
     }
 `;
 

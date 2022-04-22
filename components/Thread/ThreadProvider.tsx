@@ -4,8 +4,9 @@ import { withTheme } from "@emotion/react";
 import { Theme } from "@mui/material";
 
 import Post from "@components/Post";
+import Gallery from "@components/Gallery";
 
-import { ThreadPost, ThreadWithPosts } from "@utils/types";
+import { PostFile, ThreadPost, ThreadWithPosts } from "@utils/types";
 import { isTouchDevice } from "@utils/isTouchDevice";
 import { withLayout, WithLayoutProps } from "@components/Layout.hoc";
 
@@ -23,9 +24,14 @@ export interface ThreadProviderProps {
     posts: ThreadPost[];
     children: React.ReactNode;
     theme: Theme;
+    withoutGallery?: boolean;
+
+    galleryOpen?: boolean;
+    onCloseGallery(): void;
 }
 export interface ThreadProviderStates {
     focusedPost: ThreadPost | null;
+    files: PostFile[];
 }
 
 const ThreadContext = React.createContext<ThreadContextValues>({
@@ -40,9 +46,19 @@ const ThreadContext = React.createContext<ThreadContextValues>({
 class ThreadProvider extends React.Component<ThreadProviderProps & WithLayoutProps, ThreadProviderStates> {
     public state: ThreadProviderStates = {
         focusedPost: null,
+        files: this.props.posts.map(post => post.file).filter<PostFile>((file: PostFile | null | undefined): file is PostFile => Boolean(file)),
     };
 
     private readonly domObjectMap = new Map<ThreadPost["id"], HTMLDivElement>();
+
+    public componentDidUpdate(prevProps: Readonly<ThreadProviderProps & WithLayoutProps>) {
+        if (this.props.posts !== prevProps.posts) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
+                files: this.props.posts.map(post => post.file).filter<PostFile>((file: PostFile | null | undefined): file is PostFile => Boolean(file)),
+            });
+        }
+    }
 
     private setFocusedThreadId = (id: ThreadPost["id"] | null) => {
         if (id === null) {
@@ -80,8 +96,8 @@ class ThreadProvider extends React.Component<ThreadProviderProps & WithLayoutPro
     };
 
     public render() {
-        const { thread, posts, children } = this.props;
-        const { focusedPost } = this.state;
+        const { thread, posts, children, withoutGallery = false, galleryOpen = false, onCloseGallery } = this.props;
+        const { focusedPost, files } = this.state;
 
         return (
             <ThreadContext.Provider
@@ -96,6 +112,7 @@ class ThreadProvider extends React.Component<ThreadProviderProps & WithLayoutPro
             >
                 {children}
                 {focusedPost && !isTouchDevice() && <Post modal post={focusedPost} />}
+                {!withoutGallery && <Gallery onClose={onCloseGallery} files={files} hidden={!galleryOpen} />}
             </ThreadContext.Provider>
         );
     }

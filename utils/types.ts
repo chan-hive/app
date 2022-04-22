@@ -26,6 +26,7 @@ export type QuoteContentItem = QuoteContent;
 export type TextContentItem = TextContent;
 export type Board = BoardsQuery["boards"][0];
 export type BoardListItem = BoardListQuery["boards"][0];
+export type PostFile = Exclude<ThreadPost["file"], null | undefined>;
 
 export interface BasePageProps {
     layoutProps?: Omit<LayoutProps, "children">;

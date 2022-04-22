@@ -2,9 +2,10 @@ import React from "react";
 import Measure, { ContentRect, MeasuredComponentProps } from "react-measure";
 import Head from "next/head";
 
-import { AppBar, Hidden, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Hidden, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+import { NavigationButtonItem } from "@components/Layout";
 import { HideOnScroll } from "@components/HideOnScroll";
 
 import { Logo } from "@components/Header.styles";
@@ -12,6 +13,7 @@ import { Logo } from "@components/Header.styles";
 export interface HeaderProps {
     title?: string | null;
     onAppBarHeightChange(height: number): void;
+    buttons: NavigationButtonItem[];
 }
 export interface HeaderStates {}
 
@@ -24,8 +26,25 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
         this.props.onAppBarHeightChange(Math.ceil(bounds.height));
     };
 
+    private renderButton = ({ name, onClick, label, icon: Icon }: NavigationButtonItem, index: number, array: NavigationButtonItem[]) => {
+        return (
+            <Tooltip title={label}>
+                <IconButton
+                    edge={index + 1 === array.length ? "end" : undefined}
+                    sx={{ color: "rgba(0, 0, 0, 0.5)" }}
+                    key={name}
+                    size="large"
+                    aria-label={label}
+                    color="inherit"
+                    onClick={onClick}
+                >
+                    <Icon />
+                </IconButton>
+            </Tooltip>
+        );
+    };
     private renderContent = ({ measureRef }: MeasuredComponentProps) => {
-        const { title } = this.props;
+        const { title, buttons } = this.props;
         const content = (
             <Toolbar>
                 <Hidden mdDown>
@@ -39,6 +58,10 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
                 <Typography variant="h6" fontWeight="500" noWrap>
                     {title ? `${title}` : "Chanhive"}
                 </Typography>
+                <Hidden mdDown>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box sx={{ display: "flex" }}>{buttons.map(this.renderButton)}</Box>
+                </Hidden>
             </Toolbar>
         );
 

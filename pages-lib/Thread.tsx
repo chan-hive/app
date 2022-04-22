@@ -13,7 +13,7 @@ import { ThreadInformationQuery, ThreadWithPostsComponent, ThreadWithPostsQuery 
 
 import { reactNoop } from "@utils/noop";
 
-export interface ThreadRouteProps extends WithLayoutProps {
+export interface ThreadRouteProps {
     threadId: number;
     boardId: string;
     postCount: number;
@@ -25,7 +25,7 @@ export interface ThreadRouteStates {
     galleryOpen: boolean;
 }
 
-class ThreadRoute extends React.Component<ThreadRouteProps, ThreadRouteStates> {
+class ThreadRoute extends React.Component<ThreadRouteProps & WithLayoutProps, ThreadRouteStates> {
     public state: ThreadRouteStates = {
         thread: null,
         currentCount: 0,

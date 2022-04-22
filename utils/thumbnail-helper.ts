@@ -3,7 +3,7 @@ import { VideoHelper } from "@utils/video-helper";
 import { FileInformation } from "@utils/types";
 
 interface SubscribeEntry {
-    dom: HTMLAnchorElement | HTMLDivElement;
+    dom: HTMLAnchorElement | HTMLDivElement | HTMLVideoElement;
     file: FileInformation;
     wheelListener(this: Omit<SubscribeEntry, "wheelListener">, e: Event): void;
 }
@@ -16,9 +16,11 @@ export class ThumbnailHelper {
     // eslint-disable-next-line no-useless-constructor,no-empty-function
     private constructor() {}
 
-    public subscribe(dom: HTMLAnchorElement | HTMLDivElement, file: FileInformation) {
+    public subscribe(dom: HTMLAnchorElement | HTMLDivElement | HTMLVideoElement, file: FileInformation) {
         const wheelListener = this.handleWheel.bind({ dom, file });
         this.subscribedMap.set(file.id, { dom, file, wheelListener });
+
+        console.info(dom, file);
 
         dom.addEventListener("wheel", wheelListener, false);
     }
@@ -34,7 +36,7 @@ export class ThumbnailHelper {
     }
 
     private handleWheel(this: Omit<SubscribeEntry, "wheelListener">, e: Event) {
-        if (!this.file.extension.endsWith("webm")) {
+        if (!this.file.isVideo) {
             return;
         }
 

@@ -6,6 +6,8 @@ import PreventBodyScroll from "@components/UI/PreventBodyScroll";
 
 import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, Thumbnail, ThumbnailImage } from "@components/Gallery/index.styles";
 
+import { ThumbnailHelper } from "@utils/thumbnail-helper";
+import { VideoHelper } from "@utils/video-helper";
 import { PostFile } from "@utils/types";
 
 export interface GalleryProps {
@@ -46,6 +48,14 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     private handleBackgroundClick = () => {
         this.props.onClose();
     };
+    private handleVideoDOM = (dom?: HTMLVideoElement | null) => {
+        if (!dom) {
+            return;
+        }
+
+        ThumbnailHelper.instance.subscribe(dom, this.props.files[this.state.currentIndex]);
+        VideoHelper.instance.addElement(this.props.files[this.state.currentIndex], dom);
+    };
 
     private renderFile = (file: PostFile, index: number) => {
         const { files } = this.props;
@@ -73,7 +83,9 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
                 <PreventBodyScroll />
                 <Container>
                     <Body onClick={this.handleBackgroundClick}>
-                        {currentFile.isVideo && <video onClick={this.handleMediaClick} autoPlay loop src={currentFile.url} />}
+                        {currentFile.isVideo && (
+                            <video ref={this.handleVideoDOM} onClick={this.handleMediaClick} autoPlay controls loop src={currentFile.url} />
+                        )}
                         {!currentFile.isVideo && <img onClick={this.handleMediaClick} src={currentFile.url} alt={currentFile.name + currentFile.extension} />}
                     </Body>
                     <Playlist>

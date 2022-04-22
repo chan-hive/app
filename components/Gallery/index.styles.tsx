@@ -32,6 +32,8 @@ export const Container = styled.div`
 export const Playlist = styled.div`
     padding: 0 ${({ theme }) => theme.spacing(1)};
 
+    flex: 0 0 auto;
+
     overflow-y: auto;
 
     background: rgba(0, 0, 0, 0.5);
@@ -89,7 +91,7 @@ export const Body = styled.div`
 
     > video,
     > img {
-        max-width: 100%;
+        max-width: 80%;
 
         display: block;
 

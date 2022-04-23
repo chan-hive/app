@@ -24,11 +24,23 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
         currentIndex: 0,
     };
 
+    public componentDidMount() {
+        if (!this.props.hidden) {
+            this.configureEventListeners();
+        }
+    }
     public componentDidUpdate(prevProps: Readonly<GalleryProps>) {
         if (this.props.files !== prevProps.files) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ currentIndex: 0 });
         }
+
+        if (this.props.hidden !== prevProps.hidden) {
+            this.configureEventListeners(this.props.hidden);
+        }
+    }
+    public componentWillUnmount() {
+        this.configureEventListeners(true);
     }
 
     private handlePlaylistItemClick = memoizeOne((index: number) => {
@@ -55,6 +67,44 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
 
         ThumbnailHelper.instance.subscribe(dom, this.props.files[this.state.currentIndex]);
         VideoHelper.instance.addElement(this.props.files[this.state.currentIndex], dom);
+    };
+    private handleGlobalKeyDown = (e: KeyboardEvent) => {
+        switch (e.code) {
+            case "ArrowRight":
+                this.moveIndex("forward");
+                break;
+
+            case "ArrowLeft":
+                this.moveIndex("backward");
+                break;
+
+            default:
+                break;
+        }
+    };
+
+    private moveIndex = (mode: "forward" | "backward", amount = 1) => {
+        this.setState((prevStates: GalleryStates) => {
+            let nextIndex = prevStates.currentIndex + (mode === "backward" ? -amount : amount);
+            if (nextIndex < 0) {
+                nextIndex = this.props.files.length - 1;
+            }
+
+            if (nextIndex >= this.props.files.length) {
+                nextIndex = 0;
+            }
+
+            return {
+                currentIndex: nextIndex,
+            };
+        });
+    };
+    private configureEventListeners = (uninstall: boolean = false) => {
+        if (uninstall) {
+            window.removeEventListener("keydown", this.handleGlobalKeyDown, false);
+        } else {
+            window.addEventListener("keydown", this.handleGlobalKeyDown, false);
+        }
     };
 
     private renderFile = (file: PostFile, index: number) => {

@@ -78,7 +78,7 @@ export const Thumbnail = styled.div`
 `;
 
 export const ThumbnailImage = styled.img`
-    max-width: 100%;
+    max-width: 125px;
 
     display: block;
 `;

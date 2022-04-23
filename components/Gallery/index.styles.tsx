@@ -92,6 +92,7 @@ export const Body = styled.div`
     > video,
     > img {
         max-width: 80%;
+        max-height: 100%;
 
         display: block;
 

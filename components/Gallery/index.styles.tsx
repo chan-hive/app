@@ -34,6 +34,7 @@ export const Playlist = styled.div`
 
     flex: 0 0 auto;
 
+    overflow-x: hidden;
     overflow-y: auto;
 
     background: rgba(0, 0, 0, 0.5);

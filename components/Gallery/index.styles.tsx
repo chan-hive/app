@@ -90,6 +90,8 @@ export const Body = styled.div`
     justify-content: center;
     flex: 1 1 auto;
 
+    position: relative;
+
     > video,
     > img {
         max-width: 80%;

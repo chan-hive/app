@@ -3,6 +3,7 @@ import React from "react";
 import memoizeOne from "memoize-one";
 
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
+import { FileInformation } from "@components/Gallery/FileInformation";
 
 import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, Thumbnail, ThumbnailImage } from "@components/Gallery/index.styles";
 
@@ -137,6 +138,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
                             <video ref={this.handleVideoDOM} onClick={this.handleMediaClick} autoPlay controls loop src={currentFile.url} />
                         )}
                         {!currentFile.isVideo && <img onClick={this.handleMediaClick} src={currentFile.url} alt={currentFile.name + currentFile.extension} />}
+                        <FileInformation total={files.length} current={currentIndex} file={currentFile} />
                     </Body>
                     <Playlist>
                         <PlaylistContainer>{files.map(this.renderFile)}</PlaylistContainer>

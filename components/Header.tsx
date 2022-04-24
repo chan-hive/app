@@ -28,11 +28,10 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
 
     private renderButton = ({ name, onClick, label, icon: Icon }: NavigationButtonItem, index: number, array: NavigationButtonItem[]) => {
         return (
-            <Tooltip title={label}>
+            <Tooltip key={name} title={label}>
                 <IconButton
                     edge={index + 1 === array.length ? "end" : undefined}
                     sx={{ color: "rgba(0, 0, 0, 0.5)" }}
-                    key={name}
                     size="large"
                     aria-label={label}
                     color="inherit"

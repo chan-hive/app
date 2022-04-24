@@ -20,8 +20,6 @@ export class ThumbnailHelper {
         const wheelListener = this.handleWheel.bind({ dom, file });
         this.subscribedMap.set(file.id, { dom, file, wheelListener });
 
-        console.info(dom, file);
-
         dom.addEventListener("wheel", wheelListener, false);
     }
     public unsubscribe(file: FileInformation) {

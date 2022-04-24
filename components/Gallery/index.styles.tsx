@@ -53,6 +53,8 @@ export const PlaylistItem = styled(({ isFocused, ...rest }: React.ComponentProps
 >`
     position: relative;
 
+    background-color: ${({ isFocused, theme }) => (isFocused ? theme.palette.primary.main : "transparent")};
+
     &:not(:last-of-type) {
         margin-bottom: ${({ theme }) => theme.spacing(1)};
     }
@@ -80,6 +82,7 @@ export const Thumbnail = styled.div`
 
 export const ThumbnailImage = styled.img`
     max-width: 125px;
+    max-height: 125px;
 
     display: block;
 `;

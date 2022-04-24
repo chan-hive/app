@@ -44,6 +44,9 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
         this.configureEventListeners(true);
     }
 
+    private handleMediaSessionAction = (detail: MediaSessionActionDetails) => {
+        this.moveIndex(detail.action === "previoustrack" ? "backward" : "forward");
+    };
     private handlePlaylistItemClick = memoizeOne((index: number) => {
         return () => {
             this.setState({
@@ -103,8 +106,12 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     private configureEventListeners = (uninstall: boolean = false) => {
         if (uninstall) {
             window.removeEventListener("keydown", this.handleGlobalKeyDown, false);
+            navigator.mediaSession.setActionHandler("previoustrack", null);
+            navigator.mediaSession.setActionHandler("nexttrack", null);
         } else {
             window.addEventListener("keydown", this.handleGlobalKeyDown, false);
+            navigator.mediaSession.setActionHandler("previoustrack", this.handleMediaSessionAction);
+            navigator.mediaSession.setActionHandler("nexttrack", this.handleMediaSessionAction);
         }
     };
 

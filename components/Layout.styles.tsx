@@ -13,12 +13,16 @@ export const GlobalStyle = css`
         background-color: #f2f3f9;
     }
 
+    body {
+        overflow-x: hidden;
+    }
+
     .infinite-scroll-component {
         overflow: visible !important;
     }
 
     .${NO_SCROLL_CLASSNAME} {
-        overflow-y: hidden;
+        overflow: hidden !important;
     }
 `;
 

@@ -77,6 +77,8 @@ type File {
   thumbnailHeight: Int!
   uploadedTimestamp: Float!
   isArchived: Boolean!
+  metadata: String
+  metadataChecked: String!
   url: String!
   thumbnailUrl: String!
   isImage: Boolean!
@@ -84,6 +86,7 @@ type File {
 }
 
 type Query {
+  file(id: Int!): File
   board(id: String!): Board
   boards: [Board!]!
   threadCount(boardId: String): Int!

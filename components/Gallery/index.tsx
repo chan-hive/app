@@ -30,7 +30,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
             this.configureEventListeners();
         }
     }
-    public componentDidUpdate(prevProps: Readonly<GalleryProps>) {
+    public async componentDidUpdate(prevProps: Readonly<GalleryProps>) {
         if (this.props.files !== prevProps.files) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ currentIndex: 0 });

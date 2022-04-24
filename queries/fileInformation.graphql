@@ -11,4 +11,6 @@ fragment FileInformation on File {
     uploadedTimestamp
     size
     isVideo
+    metadata
+    metadataChecked
 }

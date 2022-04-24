@@ -32,6 +32,7 @@ export class FileInformation extends React.Component<FileInformationProps, FileI
                         {file.extension}
                     </a>
                 </span>
+                {file.metadata && <span>metadata: {file.metadata}</span>}
                 <span>{`${fileSize(file.size).toUpperCase()} (${file.size.toLocaleString()} Bytes)`}</span>
                 <span>
                     <a

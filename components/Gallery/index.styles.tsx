@@ -72,14 +72,6 @@ export const PlaylistItem = styled(({ isFocused, ...rest }: React.ComponentProps
     }
 `;
 
-export const Thumbnail = styled.div`
-    width: 125px;
-    height: 70px;
-
-    background-size: cover;
-    background-position: center center;
-`;
-
 export const ThumbnailImage = styled.img`
     max-width: 125px;
     max-height: 125px;

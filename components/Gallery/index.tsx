@@ -5,7 +5,7 @@ import memoizeOne from "memoize-one";
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
 import { FileInformation } from "@components/Gallery/FileInformation";
 
-import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, Thumbnail, ThumbnailImage } from "@components/Gallery/index.styles";
+import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, ThumbnailImage } from "@components/Gallery/index.styles";
 
 import { ThumbnailHelper } from "@utils/thumbnail-helper";
 import { VideoHelper } from "@utils/video-helper";
@@ -115,8 +115,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
 
         return (
             <PlaylistItem isFocused={file === currentFile} key={file.id} onClick={this.handlePlaylistItemClick(index)}>
-                {file.isVideo && <Thumbnail style={{ backgroundImage: `url(${file.thumbnailUrl})` }} />}
-                {!file.isVideo && <ThumbnailImage src={file.thumbnailUrl} alt={`${file.name}${file.extension}`} />}
+                <ThumbnailImage src={file.thumbnailUrl} alt={`${file.name}${file.extension}`} />
             </PlaylistItem>
         );
     };

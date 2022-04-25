@@ -61,14 +61,19 @@ export const ThumbnailWrapper = styled.div<{ expanded: boolean }>`
 `;
 
 export const ModalRoot = styled.div`
-    width: 800px;
+    min-width: 500px;
     margin: 0;
     padding: 0;
 
     position: fixed;
     top: 0;
+    left: 0;
 
     pointer-events: none;
+
+    ${Card} {
+        margin-bottom: 0;
+    }
 `;
 
 export const ThumbnailButton = styled(ButtonBase)`

@@ -29,7 +29,7 @@ export class ModalHelper {
     };
 
     private calculatePosition = (dom: HTMLElement) => {
-        const height = dom.offsetHeight + 16;
+        const height = dom.offsetHeight;
         const width = dom.offsetWidth;
         const top = Math.max(0, (this.mouseY * (this.clientHeight - height)) / this.clientHeight);
         const threshold = this.clientWidth / 2;

@@ -24,6 +24,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     public state: GalleryStates = {
         currentIndex: 0,
     };
+    private videoDOM: HTMLVideoElement | null = null;
 
     public componentDidMount() {
         if (!this.props.hidden) {
@@ -69,6 +70,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
             return;
         }
 
+        this.videoDOM = dom;
         ThumbnailHelper.instance.subscribe(dom, this.props.files[this.state.currentIndex]);
         VideoHelper.instance.addElement(this.props.files[this.state.currentIndex], dom);
     };
@@ -84,6 +86,17 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
 
             default:
                 break;
+        }
+    };
+    private handlePlayPause = async (detail: MediaSessionActionDetails) => {
+        if ((detail.action !== "pause" && detail.action !== "play") || !this.videoDOM) {
+            return;
+        }
+
+        if (detail.action === "pause") {
+            this.videoDOM.pause();
+        } else {
+            await this.videoDOM.play();
         }
     };
 
@@ -106,10 +119,14 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     private configureEventListeners = (uninstall: boolean = false) => {
         if (uninstall) {
             window.removeEventListener("keydown", this.handleGlobalKeyDown, false);
+            navigator.mediaSession.setActionHandler("play", null);
+            navigator.mediaSession.setActionHandler("pause", null);
             navigator.mediaSession.setActionHandler("previoustrack", null);
             navigator.mediaSession.setActionHandler("nexttrack", null);
         } else {
             window.addEventListener("keydown", this.handleGlobalKeyDown, false);
+            navigator.mediaSession.setActionHandler("play", this.handlePlayPause);
+            navigator.mediaSession.setActionHandler("pause", this.handlePlayPause);
             navigator.mediaSession.setActionHandler("previoustrack", this.handleMediaSessionAction);
             navigator.mediaSession.setActionHandler("nexttrack", this.handleMediaSessionAction);
         }

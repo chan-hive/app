@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption,jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */
 import React from "react";
 import memoizeOne from "memoize-one";
+import * as _ from "lodash";
 
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
 import { FileInformation } from "@components/Gallery/FileInformation";
@@ -10,6 +11,7 @@ import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, Thumb
 import { ThumbnailHelper } from "@utils/thumbnail-helper";
 import { VideoHelper } from "@utils/video-helper";
 import { PostFile } from "@utils/types";
+import GalleryOptions, { GalleryOptionsValue } from "@components/Gallery/Options";
 
 export interface GalleryProps {
     hidden: boolean;
@@ -18,11 +20,15 @@ export interface GalleryProps {
 }
 export interface GalleryStates {
     currentIndex: number;
+    option: GalleryOptionsValue;
 }
 
 export default class Gallery extends React.Component<GalleryProps, GalleryStates> {
     public state: GalleryStates = {
         currentIndex: 0,
+        option: {
+            repeat: "repeat-one",
+        },
     };
     private videoDOM: HTMLVideoElement | null = null;
 
@@ -99,6 +105,22 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
             await this.videoDOM.play();
         }
     };
+    private handleOptionChange = (option: GalleryOptionsValue) => {
+        this.setState({
+            option: _.cloneDeep(option),
+        });
+    };
+    private handleEnded = () => {
+        const {
+            option: { repeat },
+        } = this.state;
+
+        if (repeat !== "repeat-all") {
+            return;
+        }
+
+        this.moveIndex("forward");
+    };
 
     private moveIndex = (mode: "forward" | "backward", amount = 1) => {
         this.setState((prevStates: GalleryStates) => {
@@ -145,7 +167,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     };
     public render() {
         const { hidden, files } = this.props;
-        const { currentIndex } = this.state;
+        const { currentIndex, option } = this.state;
         const currentFile = files[currentIndex];
 
         if (hidden) {
@@ -158,10 +180,19 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
                 <Container>
                     <Body onClick={this.handleBackgroundClick}>
                         {currentFile.isVideo && (
-                            <video ref={this.handleVideoDOM} onClick={this.handleMediaClick} autoPlay controls loop src={currentFile.url} />
+                            <video
+                                ref={this.handleVideoDOM}
+                                onClick={this.handleMediaClick}
+                                autoPlay
+                                controls
+                                onEnded={this.handleEnded}
+                                loop={option.repeat === "repeat-one"}
+                                src={currentFile.url}
+                            />
                         )}
                         {!currentFile.isVideo && <img onClick={this.handleMediaClick} src={currentFile.url} alt={currentFile.name + currentFile.extension} />}
                         <FileInformation total={files.length} current={currentIndex} file={currentFile} />
+                        <GalleryOptions onChange={this.handleOptionChange} value={this.state.option} />
                     </Body>
                     <Playlist>
                         <PlaylistContainer>{files.map(this.renderFile)}</PlaylistContainer>

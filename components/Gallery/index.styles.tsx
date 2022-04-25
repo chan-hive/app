@@ -12,7 +12,7 @@ export const Root = styled.div`
     right: 0;
     bottom: 0;
 
-    z-index: 10000;
+    z-index: 1499;
 
     color: white;
     background: rgba(0, 0, 0, 0.75);

@@ -4,8 +4,6 @@ import { Mobile } from "@styles/utils";
 
 export const BodyWrapper = styled.div`
     ${Mobile} {
-        max-width: calc(100% - ${({ theme }) => theme.spacing(8)});
-
         padding: ${({ theme }) => theme.spacing(1)};
 
         flex: 1 1 auto;

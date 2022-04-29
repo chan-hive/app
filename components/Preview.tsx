@@ -36,7 +36,7 @@ class Preview extends React.Component<PreviewProps & WithStateProps<RecoilStateV
     private updateDOMPosition = (dom: HTMLImageElement | HTMLVideoElement, file: FileInformation) => {
         const height = dom.offsetHeight + 16;
         const width = dom.offsetWidth;
-        const top = !file.extension.endsWith("webm")
+        const top = !file.isVideo
             ? Math.max(0, (this.mouseY * (this.clientHeight - height)) / this.clientHeight)
             : Math.max(0, Math.min(this.clientHeight - height, this.mouseY - 120));
 

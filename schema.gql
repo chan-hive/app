@@ -68,6 +68,7 @@ type File {
   id: Int!
   mime: String!
   name: String!
+  path: String!
   extension: String!
   md5: String!
   size: Int!
@@ -77,7 +78,7 @@ type File {
   thumbnailHeight: Int!
   uploadedTimestamp: Float!
   isArchived: Boolean!
-  metadata: String
+  metadata(refresh: Boolean = false): String
   metadataChecked: String!
   url: String!
   thumbnailUrl: String!

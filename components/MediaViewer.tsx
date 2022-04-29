@@ -57,7 +57,7 @@ export default class MediaViewer extends React.Component<MediaViewerProps, Media
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { file, innerRef, className, installVideoHelper, ...rest } = this.props;
 
-        if (file.extension.endsWith("webm")) {
+        if (file.isVideo) {
             return this.renderVideo();
         }
 

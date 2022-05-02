@@ -22,7 +22,7 @@ type QuoteLinkContent {
 }
 
 type CrossThreadQuoteLinkContent {
-  postId: Int!
+  targetPostId: Int
   isOP: Boolean!
   board: String!
 }
@@ -86,6 +86,39 @@ type File {
   isVideo: Boolean!
 }
 
+type MonitorTargetFilter {
+  at: [MonitorTargetFilterAt!]!
+  content: String!
+  type: MonitorTargetFilterType!
+  caseSensitive: Boolean
+}
+
+enum MonitorTargetFilterAt {
+  Title
+  Content
+}
+
+enum MonitorTargetFilterType {
+  Text
+}
+
+type MonitorTarget {
+  boards: [String!]!
+  filters: [MonitorTargetFilter!]!
+}
+
+type MonitorInterval {
+  inMilliseconds: Int
+  inCronSchedule: String
+}
+
+type Configuration {
+  serverUrl: String!
+  monitorInterval: MonitorInterval!
+  targets: [MonitorTarget!]!
+  rawJson: String!
+}
+
 type Query {
   file(id: Int!): File
   board(id: String!): Board
@@ -93,6 +126,7 @@ type Query {
   threadCount(boardId: String): Int!
   thread(threadId: Int!, boardId: String!): Thread!
   threads(before: DateTime, count: Int!, boardId: String): [Thread!]!
+  config: Configuration!
 }
 
 type Mutation {

@@ -12,7 +12,7 @@ fragment PostContent on PostContentRow {
             text
         }
         ... on CrossThreadQuoteLinkContent {
-            postId
+            targetPostId
             isOP
             board
         }

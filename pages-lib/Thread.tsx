@@ -28,7 +28,6 @@ export default function ThreadRoute(props: ThreadRouteProps) {
     const scrollToElement = React.useCallback(
         (id: ThreadPost["id"]) => {
             const element = postElements.current[id];
-            console.info(postElements.current, id, postElements.current[id]);
             if (!element) {
                 return;
             }

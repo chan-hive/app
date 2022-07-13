@@ -3,7 +3,7 @@ import moment from "moment";
 
 import ContentRenderer from "@components/Post/ContentRenderer";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image } from "@components/Post/Card.styles";
 
 import { preloadMedia } from "@utils/preloadMedia";
 import { ThreadPost } from "@utils/types";
@@ -50,7 +50,7 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
         );
     };
 
-    public handleVideoClick = (event: MouseEvent<HTMLVideoElement>) => {
+    public handleVideoClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
         event.preventDefault();
     };
@@ -94,6 +94,15 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
                             autoPlay
                             loop
                             controls
+                            src={post.file.url}
+                            onClick={this.handleVideoClick}
+                            style={{
+                                aspectRatio: `${post.file.width} / ${post.file.height}`,
+                            }}
+                        />
+                    )}
+                    {post.file && mediaStatus === MediaStatus.Expanded && !post.file.isVideo && (
+                        <Image
                             src={post.file.url}
                             onClick={this.handleVideoClick}
                             style={{

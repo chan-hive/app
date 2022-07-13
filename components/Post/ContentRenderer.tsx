@@ -55,6 +55,7 @@ class ContentRenderer extends React.PureComponent<ContentRendererProps> {
 
     public render() {
         const { content } = this.props;
+
         return <Root>{content.map(this.renderLine)}</Root>;
     }
 }

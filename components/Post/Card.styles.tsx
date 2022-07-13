@@ -51,6 +51,19 @@ export const Video = styled.video`
     }
 `;
 
+export const Image = styled.img`
+    max-width: 100%;
+
+    display: block;
+
+    cursor: pointer;
+
+    &:not(:last-child) {
+        margin-right: ${({ theme }) => theme.spacing(1.5)};
+        margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+    }
+`;
+
 export const ThumbnailViewer = styled.div`
     width: 100%;
     max-width: 125px;

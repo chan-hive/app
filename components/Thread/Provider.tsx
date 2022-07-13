@@ -22,7 +22,7 @@ export default class ThreadProvider extends React.Component<ThreadProviderProps,
         super(props);
 
         this.state = {
-            value: generateThreadContextValue(this.props.thread, this.handlePostCardElement),
+            value: generateThreadContextValue(this.props.thread, this.handlePostCardElement, this.props.scrollToElement),
         };
     }
 
@@ -37,9 +37,9 @@ export default class ThreadProvider extends React.Component<ThreadProviderProps,
     });
 
     public render() {
-        const { children, scrollToElement } = this.props;
+        const { children } = this.props;
         const { value } = this.state;
 
-        return <ThreadContextProvider value={{ ...value, scrollToElement }}>{children}</ThreadContextProvider>;
+        return <ThreadContextProvider value={{ ...value }}>{children}</ThreadContextProvider>;
     }
 }

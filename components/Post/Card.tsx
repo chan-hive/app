@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { MouseEvent } from "react";
 import moment from "moment";
 
@@ -51,18 +52,18 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
         VideoHelper.Instance.unregister(this.props.post.file.id);
     };
 
-    private handleVideoRef = (dom?: HTMLVideoElement | null) => {
+    private handleVideoRef = async (dom?: HTMLVideoElement | null) => {
         if (!dom) {
             return;
         }
 
         const lastPosition = VideoHelper.Instance.getLastPosition(this.props.post.file!.id);
         if (lastPosition) {
-            // eslint-disable-next-line no-param-reassign
             dom.currentTime = lastPosition;
+            dom.volume = VideoHelper.Instance.getVolume();
         }
 
-        dom.play();
+        await dom.play();
         this.registerVideoElement(dom);
     };
     private handleThumbnailClick = () => {

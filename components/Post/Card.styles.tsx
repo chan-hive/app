@@ -15,7 +15,8 @@ export const Metadata = styled.div`
 
     > a,
     > span,
-    > time {
+    > time,
+    > button {
         &:not(:last-child) {
             margin-right: ${({ theme }) => theme.spacing(1)};
         }
@@ -23,6 +24,21 @@ export const Metadata = styled.div`
 
     > a {
         color: inherit;
+    }
+
+    button {
+        margin: 0;
+        padding: 0;
+        border: 0;
+
+        font-size: 0.857143rem;
+        font-family: "Roboto Mono", monospace !important;
+        text-decoration: underline;
+
+        color: ${({ theme }) => theme.palette.primary.main};
+        background: transparent;
+
+        cursor: pointer;
     }
 `;
 

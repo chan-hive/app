@@ -1,6 +1,7 @@
 import { ThreadContextValue } from "@components/Thread/Context";
 
 import { PostFile, ThreadWithPosts } from "@utils/types";
+import { generatePostRepliesMap } from "@utils/generatePostRepliesMap";
 
 export function generateThreadContextValue(
     thread: ThreadWithPosts,
@@ -13,5 +14,6 @@ export function generateThreadContextValue(
         files: thread.posts.map(p => p.file).filter((f): f is PostFile => Boolean(f)),
         postRef,
         scrollToElement,
+        repliesMap: generatePostRepliesMap(thread.posts),
     };
 }

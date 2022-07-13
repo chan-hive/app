@@ -91,7 +91,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         );
     };
 
-    private handleQuoteLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    private handleQuoteLinkClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
 
         const idData = e.currentTarget.getAttribute("data-target-id");
@@ -109,9 +109,17 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         event.preventDefault();
     };
 
+    private renderReply = (reply: ThreadPost["id"]) => {
+        return (
+            <button type="button" key={reply} data-target-id={reply} onClick={this.handleQuoteLinkClick}>
+                &gt;&gt;{reply}
+            </button>
+        );
+    };
     public render() {
         const { post, ...rest } = this.props;
         const { formattedDate, fromNow, mediaStatus } = this.state;
+        const replies = rest.repliesMap[post.id];
 
         return (
             <Root ref={rest.postRef(post.id)}>
@@ -129,6 +137,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                             {post.file.extension}
                         </a>
                     )}
+                    {replies!.map(this.renderReply)}
                 </Metadata>
                 <Content shouldWrap={mediaStatus === MediaStatus.Expanded}>
                     {post.file && mediaStatus !== MediaStatus.Expanded && (

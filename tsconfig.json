@@ -1,35 +1,70 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "downlevelIteration": true,
-        "isolatedModules": true,
-        "jsx": "preserve",
-        "baseUrl": ".",
-        "paths": {
-            "@components/*": ["./components/*"],
-            "@forms/*": ["./components/Forms/*"],
-            "@pages/*": ["./pages/*"],
-            "@routes/*": ["./pages-lib/*"],
-            "@styles/*": ["./styles/*"],
-            "@res/*": ["./res/*"],
-            "@apollo/*": ["./lib/apollo/*"],
-            "@query": ["./queries"],
-            "@lib/*": ["./lib/*"],
-            "@utils/*": ["./utils/*"],
-            "@states/*": ["./states/*"],
-            "@constants/*": ["./constants/*"]
-        }
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "./components/*"
+      ],
+      "@forms/*": [
+        "./components/Forms/*"
+      ],
+      "@pages/*": [
+        "./pages/*"
+      ],
+      "@routes/*": [
+        "./pages-lib/*"
+      ],
+      "@styles/*": [
+        "./styles/*"
+      ],
+      "@res/*": [
+        "./res/*"
+      ],
+      "@apollo/*": [
+        "./lib/apollo/*"
+      ],
+      "@query": [
+        "./queries"
+      ],
+      "@lib/*": [
+        "./lib/*"
+      ],
+      "@utils/*": [
+        "./utils/*"
+      ],
+      "@states/*": [
+        "./states/*"
+      ],
+      "@constants/*": [
+        "./constants/*"
+      ]
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules"]
+    "incremental": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

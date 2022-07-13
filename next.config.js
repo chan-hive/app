@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
     reactStrictMode: true,
+    experimental: {
+        outputStandalone: true,
+        emotion: {
+            autoLabel: "always",
+            labelFormat: "[local]",
+            sourceMap: true,
+        },
+    },
+
     publicRuntimeConfig: {
         NEXT_PUBLIC_GRAPHQL_URI: process.env.NEXT_PUBLIC_GRAPHQL_URI,
         NEXT_PUBLIC_WS_GRAPHQL_URI: process.env.NEXT_PUBLIC_WS_GRAPHQL_URI,

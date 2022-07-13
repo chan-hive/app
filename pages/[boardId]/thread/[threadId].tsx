@@ -1,17 +1,32 @@
+import React from "react";
 import type { NextPage } from "next";
 
-import ThreadRoute, { ThreadRouteProps } from "@routes/Thread";
+import ThreadRoute from "@routes/Thread";
 
 import { initializeApollo } from "@lib/apollo";
 
-import { ThreadInformationDocument, ThreadInformationQuery, ThreadInformationQueryVariables } from "@query";
+import { ThreadInformationDocument, ThreadInformationQuery, ThreadInformationQueryVariables, useThreadWithPostsQuery } from "@query";
 
 import { BasePageProps } from "@utils/types";
 
-export interface ThreadPageProps extends ThreadRouteProps, BasePageProps {}
+export interface ThreadPageProps extends BasePageProps {
+    threadId: number;
+    boardId: string;
+}
 
-const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId, thread, postCount }) => {
-    return <ThreadRoute postCount={postCount} threadId={threadId} boardId={boardId} thread={thread} />;
+const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId }) => {
+    const { data, loading } = useThreadWithPostsQuery({
+        variables: {
+            threadId,
+            boardId,
+        },
+    });
+
+    if (!data || loading) {
+        return null;
+    }
+
+    return <ThreadRoute thread={data.thread} />;
 };
 
 Thread.getInitialProps = async ({ query, req }) => {

@@ -4,8 +4,6 @@ import Link from "next/link";
 
 import { Skeleton } from "@mui/material";
 
-import Thumbnail from "@components/Thumbnail";
-
 import { Body, Content, Footer, Metadata, Root, ThumbnailWrapper, Title } from "@components/UI/Card.styles";
 
 import { FileInformation } from "@utils/types";
@@ -24,14 +22,14 @@ export interface CardProps {
     skeleton?: false;
     contentComponent?: React.ComponentType;
 }
+
 export interface CardSkeletonProps {
     skeleton: true;
     renderFooter?: () => React.ReactNode;
     renderMetadata?: () => React.ReactNode;
 }
-export interface CardStates {}
 
-const THUMBNAIL_SIZE = { width: "100%", height: 145 };
+export interface CardStates {}
 
 export default class Card extends React.Component<CardProps | CardSkeletonProps, CardStates> {
     private renderSkeleton = ({ renderFooter, renderMetadata }: CardSkeletonProps) => {
@@ -60,15 +58,15 @@ export default class Card extends React.Component<CardProps | CardSkeletonProps,
             return this.renderSkeleton(this.props);
         }
 
-        const { thumbnail, title, content, renderFooter, renderMetadata, href, as, contentComponent } = this.props;
+        const { title, content, renderFooter, renderMetadata, href, as, contentComponent, thumbnail } = this.props;
         const ContentComponent = contentComponent || Content;
 
         return (
             <Root>
-                {thumbnail && thumbnail.file && (
-                    <ThumbnailWrapper>
-                        <Thumbnail mosaic={thumbnail.mosaic} file={thumbnail.file} size={THUMBNAIL_SIZE} href={href} as={as} />
-                    </ThumbnailWrapper>
+                {thumbnail?.file && (
+                    <Link href={href} as={as} passHref>
+                        <ThumbnailWrapper style={{ backgroundImage: `url(${thumbnail.file.thumbnailUrl})` }} />
+                    </Link>
                 )}
                 <Link href={href} as={as} passHref>
                     <Body>

@@ -10,7 +10,7 @@ export const Body = styled.a`
     flex: 1 1 auto;
 `;
 
-export const ThumbnailWrapper = styled.div`
+export const ThumbnailWrapper = styled.a`
     position: relative;
 
     overflow: hidden;
@@ -18,6 +18,12 @@ export const ThumbnailWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    aspect-ratio: 276 / 145;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 `;
 
 export const Title = styled(Typography)`

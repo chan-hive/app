@@ -5,7 +5,6 @@ import { Toolbar } from "@mui/material";
 import { Global } from "@emotion/react";
 
 import Header from "@components/Header";
-import Preview from "@components/Preview";
 import Drawer from "@components/Drawer";
 
 import { GlobalStyle, Main, Root } from "@components/Layout.styles";
@@ -71,7 +70,6 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
                         {children}
                     </Main>
                 </Root>
-                <Preview />
             </LayoutContext.Provider>
         );
     }

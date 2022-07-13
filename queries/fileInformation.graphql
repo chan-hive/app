@@ -13,4 +13,5 @@ fragment FileInformation on File {
     isVideo
     metadata
     metadataChecked
+    mime
 }

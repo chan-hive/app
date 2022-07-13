@@ -5,13 +5,11 @@ import * as _ from "lodash";
 
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
 import { FileInformation } from "@components/Gallery/FileInformation";
+import GalleryOptions, { GalleryOptionsValue } from "@components/Gallery/Options";
 
 import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, ThumbnailImage } from "@components/Gallery/index.styles";
 
-import { ThumbnailHelper } from "@utils/thumbnail-helper";
-import { VideoHelper } from "@utils/video-helper";
 import { PostFile } from "@utils/types";
-import GalleryOptions, { GalleryOptionsValue } from "@components/Gallery/Options";
 
 export interface GalleryProps {
     hidden: boolean;
@@ -77,8 +75,6 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
         }
 
         this.videoDOM = dom;
-        ThumbnailHelper.instance.subscribe(dom, this.props.files[this.state.currentIndex]);
-        VideoHelper.instance.addElement(this.props.files[this.state.currentIndex], dom);
     };
     private handleGlobalKeyDown = (e: KeyboardEvent) => {
         switch (e.code) {

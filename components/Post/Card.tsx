@@ -5,8 +5,9 @@ import ContentRenderer from "@components/Post/ContentRenderer";
 
 import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image } from "@components/Post/Card.styles";
 
-import { preloadMedia } from "@utils/preloadMedia";
+import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import { ThreadPost } from "@utils/types";
+import VideoHelper from "@utils/video-helper";
 
 // eslint-disable-next-line no-shadow
 export enum MediaStatus {
@@ -31,27 +32,66 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
         mediaStatus: MediaStatus.Ready,
     };
 
-    public handleThumbnailClick = () => {
+    public componentWillUnmount() {
+        this.unregisterVideoElement();
+    }
+
+    public registerVideoElement = (dom: HTMLVideoElement) => {
+        if (!this.props.post.file?.isVideo) {
+            return;
+        }
+
+        VideoHelper.Instance.register(this.props.post.file.id, dom);
+    };
+    public unregisterVideoElement = () => {
+        if (!this.props.post.file?.isVideo) {
+            return;
+        }
+
+        VideoHelper.Instance.unregister(this.props.post.file.id);
+    };
+
+    private handleVideoRef = (dom?: HTMLVideoElement | null) => {
+        if (!dom) {
+            return;
+        }
+
+        const lastPosition = VideoHelper.Instance.getLastPosition(this.props.post.file!.id);
+        if (lastPosition) {
+            // eslint-disable-next-line no-param-reassign
+            dom.currentTime = lastPosition;
+        }
+
+        dom.play();
+        this.registerVideoElement(dom);
+    };
+    private handleThumbnailClick = () => {
         if (this.state.mediaStatus !== MediaStatus.Ready || !this.props.post.file) {
             return;
         }
 
+        const mediaCached = isMediaCached(this.props.post.file!);
+        const targetMediaStatus: MediaStatus = mediaCached ? MediaStatus.Expanded : MediaStatus.Loading;
+
         this.setState(
             {
-                mediaStatus: MediaStatus.Loading,
+                mediaStatus: targetMediaStatus,
             },
             () => {
-                preloadMedia(this.props.post.file!).then(() => {
-                    this.setState({
-                        mediaStatus: MediaStatus.Expanded,
+                if (!mediaCached) {
+                    preloadMedia(this.props.post.file!).then(() => {
+                        this.setState({
+                            mediaStatus: MediaStatus.Expanded,
+                        });
                     });
-                });
+                }
             },
         );
     };
 
     public handleVideoClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
+        this.unregisterVideoElement();
         event.preventDefault();
     };
 
@@ -91,9 +131,11 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
                     )}
                     {post.file && mediaStatus === MediaStatus.Expanded && post.file.isVideo && (
                         <Video
-                            autoPlay
+                            ref={this.handleVideoRef}
                             loop
                             controls
+                            width={post.file.width}
+                            height={post.file.height}
                             src={post.file.url}
                             onClick={this.handleVideoClick}
                             style={{

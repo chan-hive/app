@@ -5,7 +5,7 @@ import moment from "moment";
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -29,7 +29,7 @@ export interface PostCardStates {
 
 class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
     public state: PostCardStates = {
-        formattedDate: moment(this.props.post.createdAt).format("YYYY-MM-DD HH:mm:ss"),
+        formattedDate: moment(this.props.post.createdAt).format("YY/MM/DD(ddd)HH:mm:ss"),
         fromNow: moment(this.props.post.createdAt).fromNow(),
         mediaStatus: MediaStatus.Ready,
     };
@@ -131,11 +131,12 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                     <time dateTime={post.createdAt} title={fromNow}>
                         {formattedDate}
                     </time>
+                    <Formatted monospaced>No.{post.id}</Formatted>
                     {post.file && (
-                        <a rel="noreferrer nofollow" href={post.file.url} target="_blank">
+                        <Attached href={post.file.url}>
                             {post.file.name}
                             {post.file.extension}
-                        </a>
+                        </Attached>
                     )}
                     {replies!.map(this.renderReply)}
                 </Metadata>

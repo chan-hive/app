@@ -12,6 +12,7 @@ export const Metadata = styled.div`
     margin: 0 0 ${({ theme }) => theme.spacing(1.5)};
 
     font-size: 0.857143rem;
+    font-family: "Roboto Mono", monospace !important;
 
     > a,
     > span,
@@ -20,6 +21,10 @@ export const Metadata = styled.div`
         &:not(:last-child) {
             margin-right: ${({ theme }) => theme.spacing(1)};
         }
+    }
+
+    > time {
+        color: rgba(0, 0, 0, 0.65);
     }
 
     > a {
@@ -32,7 +37,6 @@ export const Metadata = styled.div`
         border: 0;
 
         font-size: 0.857143rem;
-        font-family: "Roboto Mono", monospace !important;
         text-decoration: underline;
 
         color: ${({ theme }) => theme.palette.primary.main};
@@ -42,9 +46,14 @@ export const Metadata = styled.div`
     }
 `;
 
-export const Formatted = styled.span<{ color?: string; bold?: boolean }>`
+export const Attached = styled.a`
+    color: rgba(0, 0, 0, 0.65) !important;
+`;
+
+export const Formatted = styled.span<{ color?: string; bold?: boolean; monospaced?: boolean }>`
     color: ${({ color }) => color};
     font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
+    font-family: ${({ monospaced }) => (monospaced ? '"Roboto Mono", monospace !important' : "inherit")};
 `;
 
 export const Content = styled.div<{ shouldWrap?: boolean }>`

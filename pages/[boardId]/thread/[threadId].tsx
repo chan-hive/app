@@ -1,13 +1,17 @@
 import React from "react";
 import type { NextPage } from "next";
 
+import { useTheme } from "@mui/material";
+
 import ThreadRoute from "@routes/Thread";
+import { useLayout } from "@components/Layout";
 
 import { initializeApollo } from "@lib/apollo";
 
 import { ThreadInformationDocument, ThreadInformationQuery, ThreadInformationQueryVariables, useThreadWithPostsQuery } from "@query";
 
 import { BasePageProps } from "@utils/types";
+import CollectionsIcon from "@mui/icons-material/Collections";
 
 export interface ThreadPageProps extends BasePageProps {
     threadId: number;
@@ -15,6 +19,8 @@ export interface ThreadPageProps extends BasePageProps {
 }
 
 const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId }) => {
+    const theme = useTheme();
+    const layout = useLayout();
     const { data, loading } = useThreadWithPostsQuery({
         variables: {
             threadId,
@@ -22,11 +28,26 @@ const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId }) => {
         },
     });
 
+    React.useEffect(() => {
+        layout.setNavigationButtonItems([
+            {
+                name: "open-gallery",
+                label: "갤러리 모드",
+                icon: CollectionsIcon,
+                onClick: () => {},
+            },
+        ]);
+
+        return () => {
+            layout.setNavigationButtonItems([]);
+        };
+    }, []);
+
     if (!data || loading) {
         return null;
     }
 
-    return <ThreadRoute thread={data.thread} />;
+    return <ThreadRoute theme={theme} thread={data.thread} />;
 };
 
 Thread.getInitialProps = async ({ query, req }) => {

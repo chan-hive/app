@@ -31,9 +31,9 @@ export const Formatted = styled.span<{ color?: string; bold?: boolean }>`
     font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
 `;
 
-export const Content = styled.div<{ wrap?: boolean }>`
+export const Content = styled.div<{ shouldWrap?: boolean }>`
     display: flex;
-    flex-wrap: ${({ wrap }) => (wrap ? "wrap" : "nowrap")};
+    flex-wrap: ${({ shouldWrap }) => (shouldWrap ? "wrap" : "nowrap")};
 
     font-size: 0.857143rem;
 `;

@@ -1,6 +1,7 @@
 import type {
     BoardListQuery,
     BoardsQuery,
+    CrossThreadQuoteLinkContent,
     FileInformationFragment,
     QuoteContent,
     QuoteLinkContent,
@@ -22,6 +23,7 @@ export type ThreadPostContent = ThreadPost["content"];
 export type PostContentRow = ThreadPost["content"][0];
 export type PostContentItem = PostContentRow["contents"][0];
 export type QuoteLinkContentItem = QuoteLinkContent;
+export type CrossThreadQuoteLinkContentItem = CrossThreadQuoteLinkContent;
 export type QuoteContentItem = QuoteContent;
 export type TextContentItem = TextContent;
 export type Board = BoardsQuery["boards"][0];

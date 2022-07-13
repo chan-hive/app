@@ -3,12 +3,13 @@ import React, { MouseEvent } from "react";
 import moment from "moment";
 
 import ContentRenderer from "@components/Post/ContentRenderer";
+import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
 import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
-import { ThreadPost } from "@utils/types";
 import VideoHelper from "@utils/video-helper";
+import { ThreadPost } from "@utils/types";
 
 // eslint-disable-next-line no-shadow
 export enum MediaStatus {
@@ -17,7 +18,7 @@ export enum MediaStatus {
     Expanded,
 }
 
-export interface PostCardProps {
+export interface PostCardProps extends WithThreadProps {
     post: ThreadPost;
 }
 export interface PostCardStates {
@@ -26,7 +27,7 @@ export interface PostCardStates {
     mediaStatus: MediaStatus;
 }
 
-export default class PostCard extends React.Component<PostCardProps, PostCardStates> {
+class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
     public state: PostCardStates = {
         formattedDate: moment(this.props.post.createdAt).format("YYYY-MM-DD HH:mm:ss"),
         fromNow: moment(this.props.post.createdAt).fromNow(),
@@ -90,18 +91,30 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
         );
     };
 
+    private handleQuoteLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+
+        const idData = e.currentTarget.getAttribute("data-target-id");
+        if (!idData) {
+            return;
+        }
+
+        const id = parseInt(idData, 10);
+        this.props.scrollToElement(id);
+    };
+
     public handleVideoClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
         this.unregisterVideoElement();
         event.preventDefault();
     };
 
-    render() {
-        const { post } = this.props;
+    public render() {
+        const { post, ...rest } = this.props;
         const { formattedDate, fromNow, mediaStatus } = this.state;
 
         return (
-            <Root>
+            <Root ref={rest.postRef(post.id)}>
                 <Metadata>
                     {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
                     <Formatted bold color="rgb(0, 101, 0)">
@@ -117,7 +130,7 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
                         </a>
                     )}
                 </Metadata>
-                <Content wrap={mediaStatus === MediaStatus.Expanded}>
+                <Content shouldWrap={mediaStatus === MediaStatus.Expanded}>
                     {post.file && mediaStatus !== MediaStatus.Expanded && (
                         <ThumbnailViewer
                             role="button"
@@ -153,9 +166,11 @@ export default class PostCard extends React.Component<PostCardProps, PostCardSta
                             }}
                         />
                     )}
-                    {post.content.length > 0 && <ContentRenderer content={post.content} />}
+                    {post.content.length > 0 && <ContentRenderer onQuoteLinkClick={this.handleQuoteLinkClick} {...rest} content={post.content} />}
                 </Content>
             </Root>
         );
     }
 }
+
+export default withThread(PostCard);

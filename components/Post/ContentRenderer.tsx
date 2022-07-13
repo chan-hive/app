@@ -1,48 +1,59 @@
 import React from "react";
 
+import { WithThreadProps } from "@components/Thread/withThread";
+
 import { Anchor, Item, Root } from "@components/Post/ContentRenderer.styles";
 
-import { PostContentItem, PostContentRow, QuoteContentItem, QuoteLinkContentItem, TextContentItem, ThreadPostContent } from "@utils/types";
-import { CrossThreadQuoteLinkContent } from "queries/index";
+import {
+    CrossThreadQuoteLinkContentItem,
+    PostContentItem,
+    PostContentRow,
+    QuoteContentItem,
+    QuoteLinkContentItem,
+    TextContentItem,
+    ThreadPostContent,
+} from "@utils/types";
 
-export interface ContentRendererProps {
+export interface ContentRendererProps extends WithThreadProps {
     content: ThreadPostContent;
+
+    onQuoteLinkClick(e: React.MouseEvent<HTMLAnchorElement>): void;
 }
 
 class ContentRenderer extends React.PureComponent<ContentRendererProps> {
-    public renderTextContent = (item: TextContentItem) => {
-        return <Item>{item.text}</Item>;
+    public renderTextContent = (item: TextContentItem, index: number) => {
+        return <Item key={index}>{item.text}</Item>;
     };
-    public renderQuoteContent = (item: QuoteContentItem) => {
+    public renderQuoteContent = (item: QuoteContentItem, index: number) => {
         return (
-            <Item monospaced green>
+            <Item key={index} monospaced green>
                 {item.quote}
             </Item>
         );
     };
-    public renderQuoteLinkContent = (item: QuoteLinkContentItem) => {
+    public renderQuoteLinkContent = (item: QuoteLinkContentItem, index: number) => {
         return (
-            <Anchor href="#">
+            <Anchor key={index} href="#" onClick={this.props.onQuoteLinkClick} data-target-id={item.postId}>
                 &gt;&gt;{item.postId} {item.isOP ? "(OP)" : ""}
             </Anchor>
         );
     };
-    public renderCrossThreadQuoteLinkContent = (item: CrossThreadQuoteLinkContent) => {
-        return <Item>{item.targetPostId}</Item>;
+    public renderCrossThreadQuoteLinkContent = (item: CrossThreadQuoteLinkContentItem, index: number) => {
+        return <Item key={index}>{item.targetPostId}</Item>;
     };
-    private renderContent = (item: PostContentItem) => {
+    private renderContent = (item: PostContentItem, index: number) => {
         switch (item.__typename) {
             case "TextContent":
-                return this.renderTextContent(item);
+                return this.renderTextContent(item, index);
 
             case "QuoteContent":
-                return this.renderQuoteContent(item);
+                return this.renderQuoteContent(item, index);
 
             case "QuoteLinkContent":
-                return this.renderQuoteLinkContent(item);
+                return this.renderQuoteLinkContent(item, index);
 
             case "CrossThreadQuoteLinkContent":
-                return this.renderCrossThreadQuoteLinkContent(item);
+                return this.renderCrossThreadQuoteLinkContent(item, index);
 
             default:
                 return null;

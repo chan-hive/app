@@ -1,51 +1,54 @@
 import React from "react";
 
-import CollectionsIcon from "@mui/icons-material/Collections";
+import { Theme, useTheme } from "@mui/material";
 
-import { withLayout, WithLayoutProps } from "@components/Layout.hoc";
+import PostCard from "@components/Post/Card";
+import ThreadProvider from "@components/Thread/Provider";
 
 import { Root, WidthWrapper } from "@routes/Thread.styles";
 
+import useAppBarHeight from "@utils/getAppBarHeight";
 import { ThreadPost, ThreadWithPosts } from "@utils/types";
-import PostCard from "@components/Post/Card";
 
 export interface ThreadRouteProps {
     thread: ThreadWithPosts;
+    theme: Theme;
 }
 
-export interface ThreadRouteStates {}
+export default function ThreadRoute(props: ThreadRouteProps) {
+    const { thread } = props;
+    const postElements = React.useRef<Record<ThreadPost["id"], HTMLDivElement>>({});
+    const theme = useTheme();
+    const appBarHeight = useAppBarHeight();
 
-class ThreadRoute extends React.Component<ThreadRouteProps & WithLayoutProps, ThreadRouteStates> {
-    public state: ThreadRouteStates = {};
+    const handlePostElement = React.useCallback((id: ThreadPost["id"], dom: HTMLDivElement) => {
+        postElements.current[id] = dom;
+    }, []);
 
-    public componentDidMount() {
-        this.props.setNavigationButtonItems([
-            {
-                name: "open-gallery",
-                label: "갤러리 모드",
-                icon: CollectionsIcon,
-                onClick: () => {},
-            },
-        ]);
-    }
+    const scrollToElement = React.useCallback(
+        (id: ThreadPost["id"]) => {
+            const element = postElements.current[id];
+            console.info(postElements.current, id, postElements.current[id]);
+            if (!element) {
+                return;
+            }
 
-    public componentWillUnmount() {
-        this.props.setNavigationButtonItems([]);
-    }
+            window.scrollTo({
+                top: element.offsetTop - appBarHeight - parseInt(theme.spacing(1), 10),
+            });
+        },
+        [appBarHeight],
+    );
 
-    private renderPost = (post: ThreadPost) => {
-        return <PostCard key={post.id} post={post} />;
-    };
-
-    public render() {
-        const { thread } = this.props;
-
-        return (
+    return (
+        <ThreadProvider thread={thread} onPostElement={handlePostElement} scrollToElement={scrollToElement}>
             <Root>
-                <WidthWrapper>{thread.posts.map(this.renderPost)}</WidthWrapper>
+                <WidthWrapper>
+                    {thread.posts.map(p => (
+                        <PostCard key={p.id} post={p} />
+                    ))}
+                </WidthWrapper>
             </Root>
-        );
-    }
+        </ThreadProvider>
+    );
 }
-
-export default withLayout(ThreadRoute);

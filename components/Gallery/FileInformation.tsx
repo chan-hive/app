@@ -17,12 +17,17 @@ export class FileInformation extends React.Component<FileInformationProps, FileI
         e.stopPropagation();
     };
 
+    private handleClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
     public render() {
         const { file, current, total } = this.props;
         const encodedUrl = encodeURIComponent(file.url);
 
         return (
-            <Root>
+            <Root onClick={this.handleClick}>
                 <span>
                     {current + 1} / {total}
                 </span>

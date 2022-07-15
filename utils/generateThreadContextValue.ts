@@ -7,6 +7,7 @@ export function generateThreadContextValue(
     thread: ThreadWithPosts,
     postRef: ThreadContextValue["postRef"],
     scrollToElement: ThreadContextValue["scrollToElement"],
+    setHighlightedPost: ThreadContextValue["setHighlightedPost"],
 ): ThreadContextValue {
     return {
         thread,
@@ -15,5 +16,6 @@ export function generateThreadContextValue(
         postRef,
         scrollToElement,
         repliesMap: generatePostRepliesMap(thread.posts),
+        setHighlightedPost,
     };
 }

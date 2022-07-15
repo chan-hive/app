@@ -10,6 +10,7 @@ import { ThreadPost, ThreadWithPosts } from "@utils/types";
 export interface ThreadProviderProps {
     thread: ThreadWithPosts;
     children: React.ReactNode;
+    onHighlightedPostChange(id: ThreadPost["id"] | null): void;
     onPostElement(id: ThreadPost["id"], dom: HTMLDivElement): void;
     scrollToElement(id: ThreadPost["id"]): void;
 }
@@ -22,7 +23,7 @@ export default class ThreadProvider extends React.Component<ThreadProviderProps,
         super(props);
 
         this.state = {
-            value: generateThreadContextValue(this.props.thread, this.handlePostCardElement, this.props.scrollToElement),
+            value: generateThreadContextValue(this.props.thread, this.handlePostCardElement, this.props.scrollToElement, this.setHighlightedPost),
         };
     }
 
@@ -35,6 +36,10 @@ export default class ThreadProvider extends React.Component<ThreadProviderProps,
             this.props.onPostElement(id, dom);
         };
     });
+
+    private setHighlightedPost = (id: ThreadPost["id"] | null) => {
+        this.props.onHighlightedPostChange(id);
+    };
 
     public render() {
         const { children } = this.props;

@@ -9,6 +9,7 @@ export interface ThreadContextValue {
     postRef(id: ThreadPost["id"]): (dom?: HTMLDivElement | null) => void;
     scrollToElement(id: ThreadPost["id"]): void;
     repliesMap: Record<ThreadPost["id"], ThreadPost["id"][] | undefined>;
+    setHighlightedPost(id: ThreadPost["id"] | null): void;
 }
 
 const ThreadContext = React.createContext<ThreadContextValue>(null as any);

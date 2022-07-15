@@ -11,11 +11,15 @@ import {
     QuoteContentItem,
     QuoteLinkContentItem,
     TextContentItem,
+    ThreadPost,
     ThreadPostContent,
 } from "@utils/types";
 
 export interface ContentRendererProps extends WithThreadProps {
     content: ThreadPostContent;
+
+    getOnQuoteLinkMouseOver(id: ThreadPost["id"] | null): React.MouseEventHandler;
+    onQuoteLinkMouseOut(): void;
 
     onQuoteLinkClick(e: React.MouseEvent<HTMLAnchorElement>): void;
 }
@@ -33,7 +37,14 @@ class ContentRenderer extends React.PureComponent<ContentRendererProps> {
     };
     public renderQuoteLinkContent = (item: QuoteLinkContentItem, index: number) => {
         return (
-            <Anchor key={index} href="#" onClick={this.props.onQuoteLinkClick} data-target-id={item.postId}>
+            <Anchor
+                key={index}
+                href="#"
+                onMouseOver={this.props.getOnQuoteLinkMouseOver(item.postId)}
+                onMouseOut={this.props.onQuoteLinkMouseOut}
+                onClick={this.props.onQuoteLinkClick}
+                data-target-id={item.postId}
+            >
                 &gt;&gt;{item.postId} {item.isOP ? "(OP)" : ""}
             </Anchor>
         );

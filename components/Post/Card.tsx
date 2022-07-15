@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign */
 import React, { MouseEvent } from "react";
 import moment from "moment";
+import memoizeOne from "memoize-one";
 
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -20,6 +21,7 @@ export enum MediaStatus {
 
 export interface PostCardProps extends WithThreadProps {
     post: ThreadPost;
+    highlighted: boolean;
 }
 export interface PostCardStates {
     formattedDate: string;
@@ -38,21 +40,14 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         this.unregisterVideoElement();
     }
 
-    public registerVideoElement = (dom: HTMLVideoElement) => {
-        if (!this.props.post.file?.isVideo) {
-            return;
-        }
-
-        VideoHelper.Instance.register(this.props.post.file.id, dom);
+    private handleReplyMouseOver = memoizeOne((id: ThreadPost["id"]) => {
+        return () => {
+            this.props.setHighlightedPost(id);
+        };
+    });
+    private handleReplyMouseOut = () => {
+        this.props.setHighlightedPost(null);
     };
-    public unregisterVideoElement = () => {
-        if (!this.props.post.file?.isVideo) {
-            return;
-        }
-
-        VideoHelper.Instance.unregister(this.props.post.file.id);
-    };
-
     private handleVideoRef = async (dom?: HTMLVideoElement | null) => {
         if (!dom) {
             return;
@@ -90,7 +85,6 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
             },
         );
     };
-
     private handleQuoteLinkClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
 
@@ -102,27 +96,48 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         const id = parseInt(idData, 10);
         this.props.scrollToElement(id);
     };
-
     public handleVideoClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
         this.unregisterVideoElement();
         event.preventDefault();
     };
 
+    public registerVideoElement = (dom: HTMLVideoElement) => {
+        if (!this.props.post.file?.isVideo) {
+            return;
+        }
+
+        VideoHelper.Instance.register(this.props.post.file.id, dom);
+    };
+    public unregisterVideoElement = () => {
+        if (!this.props.post.file?.isVideo) {
+            return;
+        }
+
+        VideoHelper.Instance.unregister(this.props.post.file.id);
+    };
+
     private renderReply = (reply: ThreadPost["id"]) => {
         return (
-            <button type="button" key={reply} data-target-id={reply} onClick={this.handleQuoteLinkClick}>
+            <Reply
+                href={`#p-${reply}`}
+                onMouseOver={this.handleReplyMouseOver(reply)}
+                onMouseOut={this.handleReplyMouseOut}
+                key={reply}
+                data-target-id={reply}
+                onClick={this.handleQuoteLinkClick}
+            >
                 &gt;&gt;{reply}
-            </button>
+            </Reply>
         );
     };
     public render() {
-        const { post, ...rest } = this.props;
+        const { post, highlighted, ...rest } = this.props;
         const { formattedDate, fromNow, mediaStatus } = this.state;
         const replies = rest.repliesMap[post.id];
 
         return (
-            <Root ref={rest.postRef(post.id)}>
+            <Root ref={rest.postRef(post.id)} highlighted={highlighted}>
                 <Metadata>
                     {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
                     <Formatted bold color="rgb(0, 101, 0)">
@@ -176,7 +191,15 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                             }}
                         />
                     )}
-                    {post.content.length > 0 && <ContentRenderer onQuoteLinkClick={this.handleQuoteLinkClick} {...rest} content={post.content} />}
+                    {post.content.length > 0 && (
+                        <ContentRenderer
+                            getOnQuoteLinkMouseOver={this.handleReplyMouseOver}
+                            onQuoteLinkMouseOut={this.handleReplyMouseOut}
+                            onQuoteLinkClick={this.handleQuoteLinkClick}
+                            {...rest}
+                            content={post.content}
+                        />
+                    )}
                 </Content>
             </Root>
         );

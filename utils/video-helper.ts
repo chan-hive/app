@@ -3,7 +3,7 @@ import { PostFile } from "@utils/types";
 export default class VideoHelper {
     public static readonly Instance = new VideoHelper();
 
-    private readonly videos: Record<PostFile["id"], HTMLVideoElement> = {};
+    private readonly videos: Record<PostFile["id"], [HTMLVideoElement, HTMLDivElement | null]> = {};
     private readonly playbackPositions: Record<PostFile["id"], number> = {};
     private volume = 1;
 
@@ -19,10 +19,10 @@ export default class VideoHelper {
     }
 
     private monitor = () => {
-        const entries = Object.entries(this.videos) as unknown as [number, HTMLVideoElement][];
+        const entries = Object.entries(this.videos) as unknown as [number, [HTMLVideoElement, HTMLDivElement | null]][];
 
         // eslint-disable-next-line no-restricted-syntax
-        for (const [id, dom] of entries) {
+        for (const [id, [dom]] of entries) {
             this.playbackPositions[id] = dom.currentTime;
 
             dom.volume = this.volume;
@@ -43,14 +43,21 @@ export default class VideoHelper {
         return this.playbackPositions[id];
     };
 
-    public register(id: PostFile["id"], dom: HTMLVideoElement) {
+    public register(id: PostFile["id"], dom: HTMLVideoElement, thumbnailDom?: HTMLDivElement) {
         dom.addEventListener("wheel", this.handleWheel, false);
+        if (thumbnailDom) {
+            thumbnailDom.addEventListener("wheel", this.handleWheel, false);
+        }
 
-        this.videos[id] = dom;
+        this.videos[id] = [dom, thumbnailDom || null];
     }
     public unregister(id: PostFile["id"]) {
         if (id in this.videos) {
-            this.videos[id].removeEventListener("wheel", this.handleWheel, false);
+            const [dom, thumbnail] = this.videos[id];
+            dom.removeEventListener("wheel", this.handleWheel, false);
+            if (thumbnail) {
+                thumbnail.removeEventListener("wheel", this.handleWheel, false);
+            }
         }
 
         delete this.videos[id];

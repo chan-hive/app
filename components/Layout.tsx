@@ -6,8 +6,11 @@ import { Global } from "@emotion/react";
 
 import Header from "@components/Header";
 import Drawer from "@components/Drawer";
+import MediaPreview from "@components/MediaPreview";
 
 import { GlobalStyle, Main, Root } from "@components/Layout.styles";
+
+import { PostFile } from "@utils/types";
 
 export interface LayoutProps {
     children: React.ReactNode;
@@ -15,8 +18,8 @@ export interface LayoutProps {
     withoutPadding?: boolean;
 }
 export interface LayoutStates {
-    appBarHeight: number;
     navigationButtonItems: NavigationButtonItem[];
+    previewTarget: [PostFile, HTMLDivElement] | null;
 }
 
 export interface NavigationButtonItem {
@@ -27,21 +30,21 @@ export interface NavigationButtonItem {
 }
 
 export interface LayoutContextValues {
-    appBarHeight: number;
     navigationButtonItems: NavigationButtonItem[];
     setNavigationButtonItems(items: NavigationButtonItem[]): void;
+    setPreviewTargetFile(previewTarget: [PostFile, HTMLDivElement] | null): void;
 }
 
 const LayoutContext = React.createContext<LayoutContextValues>({
-    appBarHeight: 0,
     navigationButtonItems: [],
     setNavigationButtonItems() {},
+    setPreviewTargetFile() {},
 });
 
 export default class Layout extends React.Component<LayoutProps, LayoutStates> {
     public state: LayoutStates = {
-        appBarHeight: 0,
         navigationButtonItems: [],
+        previewTarget: null,
     };
 
     private setNavigationButtonItems = (items: NavigationButtonItem[]) => {
@@ -49,20 +52,26 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
             navigationButtonItems: cloneDeep(items),
         });
     };
-    private handleAppBarHeightChange = (height: number) => {
+    private setPreviewTargetFile = (file: [PostFile, HTMLDivElement] | null) => {
         this.setState({
-            appBarHeight: height,
+            previewTarget: file,
         });
     };
 
     public render() {
         const { children, title, withoutPadding } = this.props;
-        const { appBarHeight, navigationButtonItems } = this.state;
+        const { navigationButtonItems, previewTarget } = this.state;
 
         return (
-            <LayoutContext.Provider value={{ navigationButtonItems, appBarHeight, setNavigationButtonItems: this.setNavigationButtonItems }}>
+            <LayoutContext.Provider
+                value={{
+                    navigationButtonItems,
+                    setNavigationButtonItems: this.setNavigationButtonItems,
+                    setPreviewTargetFile: this.setPreviewTargetFile,
+                }}
+            >
                 <Global styles={GlobalStyle} />
-                <Header buttons={navigationButtonItems} title={title} onAppBarHeightChange={this.handleAppBarHeightChange} />
+                <Header buttons={navigationButtonItems} title={title} />
                 <Root withoutPadding={withoutPadding}>
                     <Drawer />
                     <Main>
@@ -70,6 +79,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutStates> {
                         {children}
                     </Main>
                 </Root>
+                {previewTarget && <MediaPreview target={previewTarget} />}
             </LayoutContext.Provider>
         );
     }

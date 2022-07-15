@@ -6,7 +6,7 @@ import memoizeOne from "memoize-one";
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply, PostFloating, ReferredCards } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Attached, Reply, PostFloating, ReferredCards, Media } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -52,8 +52,8 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
     private handleReplyMouseOut = () => {
         this.props.setHighlightedPost(null);
     };
-    private handleVideoRef = async (dom?: HTMLVideoElement | null) => {
-        if (!dom) {
+    private handleVideoRef = async (dom?: HTMLVideoElement | HTMLImageElement | null) => {
+        if (!dom || dom instanceof HTMLImageElement) {
             return;
         }
 
@@ -104,7 +104,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                 prevStates.referredCardIds.indexOf(id) >= 0 ? prevStates.referredCardIds.filter(i => i !== id) : [...prevStates.referredCardIds, id],
         }));
     };
-    public handleVideoClick = (event: MouseEvent<any>) => {
+    public handleMediaClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
         this.unregisterVideoElement();
         event.preventDefault();
@@ -184,31 +184,17 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                             role="button"
                             tabIndex={-1}
                             onClick={this.handleThumbnailClick}
+                            file={post.file}
                             style={{
                                 opacity: mediaStatus === MediaStatus.Loading ? 0.5 : 1,
-                                backgroundImage: `url(${post.file.thumbnailUrl})`,
-                                aspectRatio: `${post.file.thumbnailWidth} / ${post.file.thumbnailHeight}`,
                             }}
                         />
                     )}
-                    {post.file && mediaStatus === MediaStatus.Expanded && post.file.isVideo && (
-                        <Video
+                    {post.file && mediaStatus === MediaStatus.Expanded && (
+                        <Media
+                            file={post.file}
                             ref={this.handleVideoRef}
-                            loop
-                            controls
-                            width={post.file.width}
-                            height={post.file.height}
-                            src={post.file.url}
-                            onClick={this.handleVideoClick}
-                            style={{
-                                aspectRatio: `${post.file.width} / ${post.file.height}`,
-                            }}
-                        />
-                    )}
-                    {post.file && mediaStatus === MediaStatus.Expanded && !post.file.isVideo && (
-                        <Image
-                            src={post.file.url}
-                            onClick={this.handleVideoClick}
+                            onClick={this.handleMediaClick}
                             style={{
                                 aspectRatio: `${post.file.width} / ${post.file.height}`,
                             }}

@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import Floating from "@components/Floating";
+import MediaThumbnail from "@components/UI/MediaThumbnail";
+import MediaViewer from "@components/UI/MediaViewer";
 
 export const Root = styled.div<{ highlighted: boolean }>`
     margin: 0 0 ${({ theme }) => theme.spacing(1)};
@@ -67,51 +69,33 @@ export const Formatted = styled.span<{ color?: string; bold?: boolean; monospace
 export const Content = styled.div<{ shouldWrap?: boolean }>`
     display: flex;
     flex-wrap: ${({ shouldWrap }) => (shouldWrap ? "wrap" : "nowrap")};
+    align-items: flex-start;
 
     font-size: 0.857143rem;
 `;
 
-export const Video = styled.video`
-    max-width: 100%;
-
-    display: block;
-
-    cursor: pointer;
-
-    &:not(:last-child) {
-        margin-right: ${({ theme }) => theme.spacing(1.5)};
-        margin-bottom: ${({ theme }) => theme.spacing(1.5)};
-    }
-`;
-
-export const Image = styled.img`
-    max-width: 100%;
-
-    display: block;
-
-    cursor: pointer;
-
-    &:not(:last-child) {
-        margin-right: ${({ theme }) => theme.spacing(1.5)};
-        margin-bottom: ${({ theme }) => theme.spacing(1.5)};
-    }
-`;
-
-export const ThumbnailViewer = styled.div`
-    width: 100%;
+export const ThumbnailViewer = styled(MediaThumbnail)`
     max-width: 125px;
-    max-height: 125px;
 
     margin-right: ${({ theme }) => theme.spacing(1.5)};
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 
     cursor: pointer;
 
     > img {
         max-width: 100%;
+    }
+`;
+
+export const Media = styled(MediaViewer)`
+    max-width: 100%;
+
+    display: block;
+
+    cursor: pointer;
+
+    &:not(:last-child) {
+        margin-right: ${({ theme }) => theme.spacing(1.5)};
+        margin-bottom: ${({ theme }) => theme.spacing(1.5)};
     }
 `;
 

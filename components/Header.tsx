@@ -1,5 +1,4 @@
 import React from "react";
-import Measure, { ContentRect, MeasuredComponentProps } from "react-measure";
 import Head from "next/head";
 
 import { AppBar, Box, Hidden, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
@@ -12,20 +11,11 @@ import { Logo } from "@components/Header.styles";
 
 export interface HeaderProps {
     title?: string | null;
-    onAppBarHeightChange(height: number): void;
     buttons: NavigationButtonItem[];
 }
 export interface HeaderStates {}
 
 export default class Header extends React.Component<HeaderProps, HeaderStates> {
-    private handleResize = ({ bounds }: ContentRect) => {
-        if (!bounds) {
-            return;
-        }
-
-        this.props.onAppBarHeightChange(Math.ceil(bounds.height));
-    };
-
     private renderButton = ({ name, onClick, label, icon: Icon }: NavigationButtonItem, index: number, array: NavigationButtonItem[]) => {
         return (
             <Tooltip key={name} title={label}>
@@ -42,7 +32,7 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
             </Tooltip>
         );
     };
-    private renderContent = ({ measureRef }: MeasuredComponentProps) => {
+    private renderContent = () => {
         const { title, buttons } = this.props;
         const content = (
             <Toolbar>
@@ -68,7 +58,6 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
             <>
                 <Hidden mdDown>
                     <AppBar
-                        ref={measureRef}
                         elevation={0}
                         color="transparent"
                         sx={{ background: "rgb(255, 255, 255)", boxShadow: "inset 0px -1px 1px #eaeef3", zIndex: theme => theme.zIndex.drawer + 1 }}
@@ -78,9 +67,7 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
                 </Hidden>
                 <Hidden mdUp>
                     <HideOnScroll>
-                        <AppBar ref={measureRef} sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
-                            {content}
-                        </AppBar>
+                        <AppBar sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>{content}</AppBar>
                     </HideOnScroll>
                 </Hidden>
             </>
@@ -94,9 +81,7 @@ export default class Header extends React.Component<HeaderProps, HeaderStates> {
                 <Head>
                     <title>{title ? `${title} :: Chanhive` : "Chanhive"}</title>
                 </Head>
-                <Measure bounds onResize={this.handleResize}>
-                    {this.renderContent}
-                </Measure>
+                {this.renderContent()}
             </>
         );
     }

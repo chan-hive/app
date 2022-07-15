@@ -20,7 +20,9 @@ export const Item = styled.span<{ monospaced?: boolean; green?: boolean }>`
     font-family: ${({ monospaced }) => (monospaced ? "'Consolas', monospace" : "inherit")};
 `;
 
-export const Anchor = styled.a<{ green?: boolean }>`
+export const Anchor = styled.a<{ green?: boolean; referred?: boolean }>`
     color: rgb(180, 51, 211);
     font-family: "Roboto Mono", monospace !important;
+
+    opacity: ${({ referred }) => (referred ? 0.5 : 1)};
 `;

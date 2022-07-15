@@ -36,7 +36,7 @@ export const Metadata = styled.div`
     }
 `;
 
-export const Reply = styled.a`
+export const Reply = styled.a<{ referred?: boolean }>`
     margin: 0;
     padding: 0;
     border: 0;
@@ -50,6 +50,8 @@ export const Reply = styled.a`
     background: transparent;
 
     cursor: pointer;
+
+    opacity: ${({ referred }) => (referred ? 0.5 : 1)};
 `;
 
 export const Attached = styled.a`
@@ -116,3 +118,5 @@ export const ThumbnailViewer = styled.div`
 export const PostFloating = styled(Floating)`
     width: 800px;
 `;
+
+export const ReferredCards = styled.div``;

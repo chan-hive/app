@@ -5,6 +5,7 @@ import { PostFile, ThreadPost, ThreadWithPosts } from "@utils/types";
 export interface ThreadContextValue {
     thread: ThreadWithPosts;
     posts: ThreadPost[];
+    postMap: Record<ThreadPost["id"], ThreadPost>;
     files: PostFile[];
     postRef(id: ThreadPost["id"]): (dom?: HTMLDivElement | null) => void;
     scrollToElement(id: ThreadPost["id"]): void;

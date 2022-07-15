@@ -1,6 +1,8 @@
 import React from "react";
+import memoizeOne from "memoize-one";
 
 import { WithThreadProps } from "@components/Thread/withThread";
+import PostCard from "@components/Post/Card";
 
 import { Anchor, Item, Root } from "@components/Post/ContentRenderer.styles";
 
@@ -17,14 +19,38 @@ import {
 
 export interface ContentRendererProps extends WithThreadProps {
     content: ThreadPostContent;
+    referredBy?: ThreadPost["id"];
 
     getOnQuoteLinkMouseOver(id: ThreadPost["id"] | null): React.MouseEventHandler;
     onQuoteLinkMouseOut(): void;
-
-    onQuoteLinkClick(e: React.MouseEvent<HTMLAnchorElement>): void;
+}
+export interface ContentRendererStates {
+    openedQuoteLinks: QuoteLinkContentItem[];
 }
 
 class ContentRenderer extends React.PureComponent<ContentRendererProps> {
+    public state: ContentRendererStates = {
+        openedQuoteLinks: [],
+    };
+
+    private handleQuoteLinkClick = memoizeOne((item: QuoteLinkContentItem) => {
+        return (e: React.MouseEvent) => {
+            this.props.onQuoteLinkMouseOut();
+            e.preventDefault();
+
+            if (item.postId === this.props.referredBy) {
+                return;
+            }
+
+            this.setState((prevState: ContentRendererStates) => ({
+                openedQuoteLinks:
+                    prevState.openedQuoteLinks.indexOf(item) >= 0
+                        ? prevState.openedQuoteLinks.filter(oql => oql !== item)
+                        : [...prevState.openedQuoteLinks, item],
+            }));
+        };
+    });
+
     public renderTextContent = (item: TextContentItem, index: number) => {
         return <Item key={index}>{item.text}</Item>;
     };
@@ -36,17 +62,26 @@ class ContentRenderer extends React.PureComponent<ContentRendererProps> {
         );
     };
     public renderQuoteLinkContent = (item: QuoteLinkContentItem, index: number) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { content, onQuoteLinkMouseOut, getOnQuoteLinkMouseOver, ...rest } = this.props;
+        const { openedQuoteLinks } = this.state;
+        const isOpened = openedQuoteLinks.indexOf(item) >= 0;
+        const targetPost = rest.postMap[item.postId];
+
         return (
-            <Anchor
-                key={index}
-                href="#"
-                onMouseOver={this.props.getOnQuoteLinkMouseOver(item.postId)}
-                onMouseOut={this.props.onQuoteLinkMouseOut}
-                onClick={this.props.onQuoteLinkClick}
-                data-target-id={item.postId}
-            >
-                &gt;&gt;{item.postId} {item.isOP ? "(OP)" : ""}
-            </Anchor>
+            <React.Fragment key={index}>
+                <Anchor
+                    href="#"
+                    onMouseOver={!isOpened ? this.props.getOnQuoteLinkMouseOver(item.postId) : undefined}
+                    onMouseOut={!isOpened ? this.props.onQuoteLinkMouseOut : undefined}
+                    onClick={this.handleQuoteLinkClick(item)}
+                    data-target-id={item.postId}
+                    referred={isOpened}
+                >
+                    &gt;&gt;{item.postId} {item.isOP ? "(OP)" : ""}
+                </Anchor>
+                {isOpened && targetPost && <PostCard {...rest} highlighted={false} post={targetPost} />}
+            </React.Fragment>
         );
     };
     public renderCrossThreadQuoteLinkContent = (item: CrossThreadQuoteLinkContentItem, index: number) => {

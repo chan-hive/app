@@ -6,7 +6,7 @@ import memoizeOne from "memoize-one";
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply, PostFloating } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply, PostFloating, ReferredCards } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -21,6 +21,7 @@ export enum MediaStatus {
 
 export interface PostCardProps extends WithThreadProps {
     float?: boolean;
+    referredBy?: ThreadPost["id"];
     post: ThreadPost;
     highlighted: boolean;
 }
@@ -28,6 +29,7 @@ export interface PostCardStates {
     formattedDate: string;
     fromNow: string;
     mediaStatus: MediaStatus;
+    referredCardIds: ThreadPost["id"][];
 }
 
 class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
@@ -35,6 +37,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         formattedDate: moment(this.props.post.createdAt).format("YY/MM/DD(ddd)HH:mm:ss"),
         fromNow: moment(this.props.post.createdAt).fromNow(),
         mediaStatus: MediaStatus.Ready,
+        referredCardIds: [],
     };
 
     public componentWillUnmount() {
@@ -95,7 +98,11 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         }
 
         const id = parseInt(idData, 10);
-        this.props.scrollToElement(id);
+        this.handleReplyMouseOut();
+        this.setState((prevStates: PostCardStates) => ({
+            referredCardIds:
+                prevStates.referredCardIds.indexOf(id) >= 0 ? prevStates.referredCardIds.filter(i => i !== id) : [...prevStates.referredCardIds, id],
+        }));
     };
     public handleVideoClick = (event: MouseEvent<any>) => {
         this.setState({ mediaStatus: MediaStatus.Ready });
@@ -119,26 +126,40 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
     };
 
     private renderReply = (reply: ThreadPost["id"]) => {
+        const isReferred = this.state.referredCardIds.indexOf(reply) >= 0;
+
         return (
             <Reply
                 href={`#p-${reply}`}
-                onMouseOver={this.handleReplyMouseOver(reply)}
-                onMouseOut={this.handleReplyMouseOut}
+                onMouseOver={!isReferred ? this.handleReplyMouseOver(reply) : undefined}
+                onMouseOut={!isReferred ? this.handleReplyMouseOut : undefined}
                 key={reply}
                 data-target-id={reply}
                 onClick={this.handleQuoteLinkClick}
+                referred={isReferred}
             >
                 &gt;&gt;{reply}
             </Reply>
         );
     };
+    private renderReferredCard = (id: ThreadPost["id"]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { post, float, referredBy, highlighted, ...rest } = this.props;
+
+        const targetPost = this.props.postMap[id];
+        if (!targetPost) {
+            return null;
+        }
+
+        return <PostCard key={id} referredBy={this.props.post.id} post={targetPost} highlighted={false} {...rest} />;
+    };
     private renderContent = () => {
-        const { post, highlighted, float = false, ...rest } = this.props;
-        const { formattedDate, fromNow, mediaStatus } = this.state;
+        const { post, highlighted, float = false, referredBy = false, ...rest } = this.props;
+        const { formattedDate, fromNow, mediaStatus, referredCardIds } = this.state;
         const replies = rest.repliesMap[post.id];
 
         return (
-            <Root ref={!float ? rest.postRef(post.id) : undefined} highlighted={highlighted}>
+            <Root ref={!float && !referredBy ? rest.postRef(post.id) : undefined} highlighted={highlighted}>
                 <Metadata>
                     {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
                     <Formatted bold color="rgb(0, 101, 0)">
@@ -156,6 +177,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                     )}
                     {replies!.map(this.renderReply)}
                 </Metadata>
+                {referredCardIds.length > 0 && <ReferredCards>{referredCardIds.map(this.renderReferredCard)}</ReferredCards>}
                 <Content shouldWrap={mediaStatus === MediaStatus.Expanded}>
                     {post.file && mediaStatus !== MediaStatus.Expanded && (
                         <ThumbnailViewer
@@ -194,9 +216,9 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                     )}
                     {post.content.length > 0 && (
                         <ContentRenderer
+                            referredBy={referredBy}
                             getOnQuoteLinkMouseOver={this.handleReplyMouseOver}
                             onQuoteLinkMouseOut={this.handleReplyMouseOut}
-                            onQuoteLinkClick={this.handleQuoteLinkClick}
                             {...rest}
                             content={post.content}
                         />

@@ -47,10 +47,10 @@ export const PlaylistContainer = styled.div`
     flex-direction: column;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const PlaylistItem = styled(({ isFocused, ...rest }: React.ComponentProps<typeof ButtonBase> & { isFocused: boolean }) => <ButtonBase {...rest} />)<
-    React.ComponentProps<typeof ButtonBase> & { isFocused: boolean }
->`
+type PlaylistItemProps = React.ComponentProps<typeof ButtonBase> & { isFocused: boolean };
+const PlaylistItemImpl = React.forwardRef<HTMLButtonElement, PlaylistItemProps>(({ isFocused: _, ...rest }, ref) => <ButtonBase ref={ref} {...rest} />);
+
+export const PlaylistItem = styled(PlaylistItemImpl)`
     position: relative;
 
     background-color: ${({ isFocused, theme }) => (isFocused ? theme.palette.primary.main : "transparent")};

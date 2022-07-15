@@ -23,6 +23,8 @@ export interface GalleryStates {
 }
 
 class Gallery extends React.Component<GalleryProps, GalleryStates> {
+    private thumbnailRef = this.props.files.map(() => React.createRef<HTMLButtonElement>());
+    private playlistRef = React.createRef<HTMLDivElement>();
     public state: GalleryStates = {
         currentIndex: 0,
         option: {
@@ -33,10 +35,14 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
     public componentDidMount() {
         window.addEventListener("keydown", this.handleGlobalKeyDown, false);
     }
-    public async componentDidUpdate(prevProps: Readonly<GalleryProps>) {
-        if (this.props.files !== prevProps.files) {
+    public async componentDidUpdate(prevProps: Readonly<GalleryProps>, prevStates: Readonly<GalleryStates>) {
+        if (this.props.files !== prevProps.files || (this.props.hidden !== prevProps.hidden && this.props.hidden)) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ currentIndex: 0 });
+        }
+
+        if (prevStates.currentIndex !== this.state.currentIndex) {
+            this.makeCentered(this.state.currentIndex);
         }
     }
     public componentWillUnmount() {
@@ -92,6 +98,21 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
         this.moveIndex("forward");
     };
 
+    private makeCentered = (index: number) => {
+        const targetRef = this.thumbnailRef[index];
+        if (!targetRef.current || !this.playlistRef.current) {
+            return;
+        }
+
+        const { height: viewportHeight } = this.playlistRef.current.getBoundingClientRect();
+        const { height: thumbnailHeight } = targetRef.current.getBoundingClientRect();
+        const centerY = viewportHeight / 2;
+        const halfHeight = thumbnailHeight / 2;
+
+        this.playlistRef.current.scrollTo({
+            top: targetRef.current.offsetTop - centerY + halfHeight,
+        });
+    };
     private moveIndex = (mode: "forward" | "backward", amount = 1) => {
         this.setState((prevStates: GalleryStates) => {
             let nextIndex = prevStates.currentIndex + (mode === "backward" ? -amount : amount);
@@ -115,7 +136,7 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
         const currentFile = files[currentIndex];
 
         return (
-            <PlaylistItem isFocused={file === currentFile} key={file.id} onClick={this.handlePlaylistItemClick(index)}>
+            <PlaylistItem ref={this.thumbnailRef[index]} isFocused={file === currentFile} key={file.id} onClick={this.handlePlaylistItemClick(index)}>
                 <ThumbnailImage src={file.thumbnailUrl} alt={`${file.name}${file.extension}`} />
             </PlaylistItem>
         );
@@ -149,7 +170,7 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
                         <FileInformation total={files.length} current={currentIndex} file={currentFile} />
                         <GalleryOptions onChange={this.handleOptionChange} value={this.state.option} />
                     </Body>
-                    <Playlist>
+                    <Playlist ref={this.playlistRef}>
                         <PlaylistContainer>{files.map(this.renderFile)}</PlaylistContainer>
                     </Playlist>
                 </Container>

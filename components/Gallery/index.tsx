@@ -42,7 +42,7 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
         }
 
         if (prevStates.currentIndex !== this.state.currentIndex) {
-            this.makeCentered(this.state.currentIndex);
+            this.handleIndexChanged(this.state.currentIndex);
         }
     }
     public componentWillUnmount() {
@@ -97,8 +97,7 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
 
         this.moveIndex("forward");
     };
-
-    private makeCentered = (index: number) => {
+    private handleIndexChanged = (index: number) => {
         const targetRef = this.thumbnailRef[index];
         if (!targetRef.current || !this.playlistRef.current) {
             return;
@@ -109,10 +108,16 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
         const centerY = viewportHeight / 2;
         const halfHeight = thumbnailHeight / 2;
 
-        this.playlistRef.current.scrollTo({
-            top: targetRef.current.offsetTop - centerY + halfHeight,
-        });
+        this.playlistRef.current.scrollTo({ top: targetRef.current.offsetTop - centerY + halfHeight });
+
+        const currentPost = this.props.posts.find(p => p.file?.id === this.props.files[index].id);
+        if (!currentPost) {
+            return;
+        }
+
+        this.props.scrollToElement(currentPost.id);
     };
+
     private moveIndex = (mode: "forward" | "backward", amount = 1) => {
         this.setState((prevStates: GalleryStates) => {
             let nextIndex = prevStates.currentIndex + (mode === "backward" ? -amount : amount);

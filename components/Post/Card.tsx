@@ -154,7 +154,7 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
         return <PostCard key={id} referredBy={this.props.post.id} post={targetPost} highlighted={false} {...rest} />;
     };
     private renderContent = () => {
-        const { post, highlighted, float = false, referredBy = false, ...rest } = this.props;
+        const { post, highlighted, float = false, referredBy, ...rest } = this.props;
         const { formattedDate, fromNow, mediaStatus, referredCardIds } = this.state;
         const replies = rest.repliesMap[post.id];
 

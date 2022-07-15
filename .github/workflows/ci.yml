@@ -64,3 +64,8 @@ jobs:
                   docker build -t chanhive/web-app:latest .
                   docker push chanhive/web-app:$IMAGE_TAG
                   docker push chanhive/web-app:latest
+
+            - uses: sarisia/actions-status-discord@v1
+              if: always()
+              with:
+                  webhook: ${{ secrets.DISCORD_WEBHOOK }}

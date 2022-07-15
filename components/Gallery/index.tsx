@@ -6,14 +6,15 @@ import * as _ from "lodash";
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
 import { FileInformation } from "@components/Gallery/FileInformation";
 import GalleryOptions, { GalleryOptionsValue } from "@components/Gallery/Options";
+import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
 import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, ThumbnailImage } from "@components/Gallery/index.styles";
 
+import VideoHelper from "@utils/video-helper";
 import { PostFile } from "@utils/types";
 
-export interface GalleryProps {
+export interface GalleryProps extends WithThreadProps {
     hidden: boolean;
-    files: PostFile[];
     onClose(): void;
 }
 export interface GalleryStates {
@@ -21,36 +22,41 @@ export interface GalleryStates {
     option: GalleryOptionsValue;
 }
 
-export default class Gallery extends React.Component<GalleryProps, GalleryStates> {
+class Gallery extends React.Component<GalleryProps, GalleryStates> {
     public state: GalleryStates = {
         currentIndex: 0,
         option: {
             repeat: "repeat-one",
         },
     };
-    private videoDOM: HTMLVideoElement | null = null;
 
     public componentDidMount() {
-        if (!this.props.hidden) {
-            this.configureEventListeners();
-        }
+        window.addEventListener("keydown", this.handleGlobalKeyDown, false);
     }
     public async componentDidUpdate(prevProps: Readonly<GalleryProps>) {
         if (this.props.files !== prevProps.files) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ currentIndex: 0 });
         }
-
-        if (this.props.hidden !== prevProps.hidden) {
-            this.configureEventListeners(this.props.hidden);
-        }
     }
     public componentWillUnmount() {
-        this.configureEventListeners(true);
+        window.addEventListener("keydown", this.handleGlobalKeyDown, false);
     }
 
-    private handleMediaSessionAction = (detail: MediaSessionActionDetails) => {
-        this.moveIndex(detail.action === "previoustrack" ? "backward" : "forward");
+    private handleGlobalKeyDown = (e: KeyboardEvent) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") {
+            return;
+        }
+
+        this.moveIndex(e.key === "ArrowRight" ? "forward" : "backward");
+        e.preventDefault();
+    };
+    private handleVideoDOM = (dom?: HTMLVideoElement | null) => {
+        if (!dom) {
+            return;
+        }
+
+        VideoHelper.Instance.register(this.props.files[this.state.currentIndex].id, dom);
     };
     private handlePlaylistItemClick = memoizeOne((index: number) => {
         return () => {
@@ -68,38 +74,6 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
     };
     private handleBackgroundClick = () => {
         this.props.onClose();
-    };
-    private handleVideoDOM = (dom?: HTMLVideoElement | null) => {
-        if (!dom) {
-            return;
-        }
-
-        this.videoDOM = dom;
-    };
-    private handleGlobalKeyDown = (e: KeyboardEvent) => {
-        switch (e.code) {
-            case "ArrowRight":
-                this.moveIndex("forward");
-                break;
-
-            case "ArrowLeft":
-                this.moveIndex("backward");
-                break;
-
-            default:
-                break;
-        }
-    };
-    private handlePlayPause = async (detail: MediaSessionActionDetails) => {
-        if ((detail.action !== "pause" && detail.action !== "play") || !this.videoDOM) {
-            return;
-        }
-
-        if (detail.action === "pause") {
-            this.videoDOM.pause();
-        } else {
-            await this.videoDOM.play();
-        }
     };
     private handleOptionChange = (option: GalleryOptionsValue) => {
         this.setState({
@@ -134,21 +108,6 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
             };
         });
     };
-    private configureEventListeners = (uninstall: boolean = false) => {
-        if (uninstall) {
-            window.removeEventListener("keydown", this.handleGlobalKeyDown, false);
-            navigator.mediaSession.setActionHandler("play", null);
-            navigator.mediaSession.setActionHandler("pause", null);
-            navigator.mediaSession.setActionHandler("previoustrack", null);
-            navigator.mediaSession.setActionHandler("nexttrack", null);
-        } else {
-            window.addEventListener("keydown", this.handleGlobalKeyDown, false);
-            navigator.mediaSession.setActionHandler("play", this.handlePlayPause);
-            navigator.mediaSession.setActionHandler("pause", this.handlePlayPause);
-            navigator.mediaSession.setActionHandler("previoustrack", this.handleMediaSessionAction);
-            navigator.mediaSession.setActionHandler("nexttrack", this.handleMediaSessionAction);
-        }
-    };
 
     private renderFile = (file: PostFile, index: number) => {
         const { files } = this.props;
@@ -175,7 +134,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
                 <PreventBodyScroll />
                 <Container>
                     <Body onClick={this.handleBackgroundClick}>
-                        {currentFile.isVideo && (
+                        {currentFile.isVideo && !hidden && (
                             <video
                                 ref={this.handleVideoDOM}
                                 onClick={this.handleMediaClick}
@@ -198,3 +157,5 @@ export default class Gallery extends React.Component<GalleryProps, GalleryStates
         );
     }
 }
+
+export default withThread(Gallery);

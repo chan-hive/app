@@ -4,6 +4,7 @@ import { Theme, useTheme } from "@mui/material";
 
 import PostCard from "@components/Post/Card";
 import ThreadProvider from "@components/Thread/Provider";
+import Gallery from "@components/Gallery";
 
 import { Root, WidthWrapper } from "@routes/Thread.styles";
 
@@ -13,10 +14,11 @@ import { ThreadPost, ThreadWithPosts } from "@utils/types";
 export interface ThreadRouteProps {
     thread: ThreadWithPosts;
     theme: Theme;
+    galleryOpened: boolean;
+    onGalleryClose(): void;
 }
 
-export default function ThreadRoute(props: ThreadRouteProps) {
-    const { thread } = props;
+export default function ThreadRoute({ thread, galleryOpened, onGalleryClose }: ThreadRouteProps) {
     const postElements = React.useRef<Record<ThreadPost["id"], HTMLDivElement>>({});
     const theme = useTheme();
     const appBarHeight = useAppBarHeight();
@@ -48,6 +50,7 @@ export default function ThreadRoute(props: ThreadRouteProps) {
                     ))}
                 </WidthWrapper>
             </Root>
+            <Gallery hidden={!galleryOpened} onClose={onGalleryClose} />
         </ThreadProvider>
     );
 }

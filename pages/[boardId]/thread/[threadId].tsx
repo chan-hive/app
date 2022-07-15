@@ -21,6 +21,7 @@ export interface ThreadPageProps extends BasePageProps {
 const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId }) => {
     const theme = useTheme();
     const layout = useLayout();
+    const [galleryOpened, setGalleryOpened] = React.useState(false);
     const { data, loading } = useThreadWithPostsQuery({
         variables: {
             threadId,
@@ -34,20 +35,26 @@ const Thread: NextPage<ThreadPageProps> = ({ threadId, boardId }) => {
                 name: "open-gallery",
                 label: "갤러리 모드",
                 icon: CollectionsIcon,
-                onClick: () => {},
+                onClick: () => {
+                    setGalleryOpened(true);
+                },
             },
         ]);
 
         return () => {
             layout.setNavigationButtonItems([]);
         };
-    }, []);
+    }, [setGalleryOpened]);
+
+    const handleGalleryClose = React.useCallback(() => {
+        setGalleryOpened(false);
+    }, [setGalleryOpened]);
 
     if (!data || loading) {
         return null;
     }
 
-    return <ThreadRoute theme={theme} thread={data.thread} />;
+    return <ThreadRoute onGalleryClose={handleGalleryClose} galleryOpened={galleryOpened} theme={theme} thread={data.thread} />;
 };
 
 Thread.getInitialProps = async ({ query, req }) => {

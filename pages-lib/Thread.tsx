@@ -23,6 +23,17 @@ export default function ThreadRoute({ thread, galleryOpened, onGalleryClose }: T
     const theme = useTheme();
     const appBarHeight = useAppBarHeight();
     const [highlightedPostId, setHighlightedPostId] = React.useState<ThreadPost["id"] | null>(null);
+    const [highlightedPost, setHighlightedPost] = React.useState<ThreadPost | null>(null);
+
+    React.useEffect(() => {
+        if (!highlightedPostId) {
+            setHighlightedPost(null);
+            return;
+        }
+
+        const targetPost = thread.posts.find(p => p.id === highlightedPostId);
+        setHighlightedPost(targetPost || null);
+    }, [thread, highlightedPostId]);
 
     const handlePostElement = React.useCallback((id: ThreadPost["id"], dom: HTMLDivElement) => {
         postElements.current[id] = dom;
@@ -44,6 +55,7 @@ export default function ThreadRoute({ thread, galleryOpened, onGalleryClose }: T
 
     return (
         <ThreadProvider thread={thread} onPostElement={handlePostElement} scrollToElement={scrollToElement} onHighlightedPostChange={setHighlightedPostId}>
+            {highlightedPost && <PostCard float post={highlightedPost} highlighted={false} />}
             <Root>
                 <WidthWrapper>
                     {thread.posts.map(p => (

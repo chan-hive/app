@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Floating from "@components/Floating";
 
 export const Root = styled.div<{ highlighted: boolean }>`
     margin: 0 0 ${({ theme }) => theme.spacing(1)};
@@ -110,4 +111,8 @@ export const ThumbnailViewer = styled.div`
     > img {
         max-width: 100%;
     }
+`;
+
+export const PostFloating = styled(Floating)`
+    width: 800px;
 `;

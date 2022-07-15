@@ -6,7 +6,7 @@ import memoizeOne from "memoize-one";
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply } from "@components/Post/Card.styles";
+import { Content, Formatted, ThumbnailViewer, Metadata, Root, Video, Image, Attached, Reply, PostFloating } from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -20,6 +20,7 @@ export enum MediaStatus {
 }
 
 export interface PostCardProps extends WithThreadProps {
+    float?: boolean;
     post: ThreadPost;
     highlighted: boolean;
 }
@@ -131,13 +132,13 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
             </Reply>
         );
     };
-    public render() {
-        const { post, highlighted, ...rest } = this.props;
+    private renderContent = () => {
+        const { post, highlighted, float = false, ...rest } = this.props;
         const { formattedDate, fromNow, mediaStatus } = this.state;
         const replies = rest.repliesMap[post.id];
 
         return (
-            <Root ref={rest.postRef(post.id)} highlighted={highlighted}>
+            <Root ref={!float ? rest.postRef(post.id) : undefined} highlighted={highlighted}>
                 <Metadata>
                     {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
                     <Formatted bold color="rgb(0, 101, 0)">
@@ -203,6 +204,16 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                 </Content>
             </Root>
         );
+    };
+    public render() {
+        const { float = false } = this.props;
+        const content = this.renderContent();
+
+        if (float) {
+            return <PostFloating>{content}</PostFloating>;
+        }
+
+        return content;
     }
 }
 

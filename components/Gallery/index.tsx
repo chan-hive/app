@@ -36,7 +36,7 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
         window.addEventListener("keydown", this.handleGlobalKeyDown, false);
     }
     public async componentDidUpdate(prevProps: Readonly<GalleryProps>, prevStates: Readonly<GalleryStates>) {
-        if (this.props.files !== prevProps.files || (this.props.hidden !== prevProps.hidden && this.props.hidden)) {
+        if (this.props.files !== prevProps.files) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ currentIndex: 0 });
         }

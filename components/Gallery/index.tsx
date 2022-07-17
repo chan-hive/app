@@ -117,6 +117,16 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
 
         this.props.scrollToElement(currentPost.id);
     };
+    private handleVideoMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+        if (e.shiftKey) {
+            return true;
+        }
+
+        this.moveIndex("backward");
+        e.preventDefault();
+
+        return false;
+    };
 
     private moveIndex = (mode: "forward" | "backward", amount = 1) => {
         this.setState((prevStates: GalleryStates) => {
@@ -167,11 +177,19 @@ class Gallery extends React.Component<GalleryProps, GalleryStates> {
                                 autoPlay
                                 controls
                                 onEnded={this.handleEnded}
+                                onContextMenu={this.handleVideoMouseDown}
                                 loop={option.repeat === "repeat-one"}
                                 src={currentFile.url}
                             />
                         )}
-                        {!currentFile.isVideo && <img onClick={this.handleMediaClick} src={currentFile.url} alt={currentFile.name + currentFile.extension} />}
+                        {!currentFile.isVideo && (
+                            <img
+                                onClick={this.handleMediaClick}
+                                src={currentFile.url}
+                                onContextMenu={this.handleVideoMouseDown}
+                                alt={currentFile.name + currentFile.extension}
+                            />
+                        )}
                         <FileInformation total={files.length} current={currentIndex} file={currentFile} />
                         <GalleryOptions onChange={this.handleOptionChange} value={this.state.option} />
                     </Body>

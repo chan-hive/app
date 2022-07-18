@@ -34,6 +34,7 @@ type Board {
   description: String!
   threads(count: Int): [Thread!]!
   threadCount: Int!
+  fileCount: Int!
   latestThread: Thread
 }
 

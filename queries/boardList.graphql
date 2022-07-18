@@ -3,6 +3,7 @@ query boardList {
         id
         title
         threadCount
+        fileCount
         description
         isWorkSafe
         latestThread {

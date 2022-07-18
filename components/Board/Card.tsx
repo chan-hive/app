@@ -2,14 +2,15 @@ import React from "react";
 
 import { Skeleton } from "@mui/material";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 
 import Card from "@components/UI/Card";
 import CardFooterItem from "@components/UI/CardFooterItem";
 
 import { BoardCardContent } from "@components/Board/Card.styles";
+import { Placeholder } from "@styles/placeholder";
 
 import { BoardListItem } from "@utils/types";
-import { Placeholder } from "@styles/placeholder";
 
 export interface BoardCardProps {
     board: BoardListItem;
@@ -32,6 +33,7 @@ export default class BoardCard extends React.Component<BoardCardProps | Skeleton
             <>
                 <Placeholder />
                 <CardFooterItem icon={QuestionAnswerIcon}>{board.threadCount}</CardFooterItem>
+                <CardFooterItem icon={PermMediaIcon}>{board.fileCount}</CardFooterItem>
             </>
         );
     };

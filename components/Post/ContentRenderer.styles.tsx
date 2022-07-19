@@ -13,6 +13,13 @@ export const Root = styled.div`
         line-height: 1.5;
         letter-spacing: 0.00938em;
     }
+
+    ${({ theme }) => theme.breakpoints.down("sm")} {
+        p {
+            word-break: break-word;
+            font-size: 0.8rem;
+        }
+    }
 `;
 
 export const Item = styled.span<{ monospaced?: boolean; green?: boolean }>`

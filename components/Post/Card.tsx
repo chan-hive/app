@@ -6,7 +6,21 @@ import memoizeOne from "memoize-one";
 import ContentRenderer from "@components/Post/ContentRenderer";
 import { withThread, WithThreadProps } from "@components/Thread/withThread";
 
-import { Content, Formatted, ThumbnailViewer, Metadata, Root, Attached, Reply, PostFloating, ReferredCards, Media } from "@components/Post/Card.styles";
+import {
+    Content,
+    Formatted,
+    ThumbnailViewer,
+    Metadata,
+    Root,
+    Attached,
+    Reply,
+    PostFloating,
+    ReferredCards,
+    Media,
+    MobileRoot,
+    MobileThumbnail,
+    MobileContent,
+} from "@components/Post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";
@@ -24,6 +38,7 @@ export interface PostCardProps extends WithThreadProps {
     referredBy?: ThreadPost["id"];
     post: ThreadPost;
     highlighted: boolean;
+    mobile?: boolean;
 }
 export interface PostCardStates {
     formattedDate: string;
@@ -153,53 +168,81 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
 
         return <PostCard key={id} referredBy={this.props.post.id} post={targetPost} highlighted={false} {...rest} />;
     };
-    private renderContent = () => {
-        const { post, highlighted, float = false, referredBy, ...rest } = this.props;
-        const { formattedDate, fromNow, mediaStatus, referredCardIds } = this.state;
-        const replies = rest.repliesMap[post.id];
+    private renderDesktopMedia = () => {
+        const { post } = this.props;
+        const { mediaStatus } = this.state;
 
         return (
-            <Root ref={!float && !referredBy ? rest.postRef(post.id) : undefined} highlighted={highlighted}>
-                <Metadata>
-                    {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
+            <>
+                {post.file && mediaStatus !== MediaStatus.Expanded && (
+                    <ThumbnailViewer
+                        role="button"
+                        tabIndex={-1}
+                        onClick={this.handleThumbnailClick}
+                        file={post.file}
+                        style={{
+                            opacity: mediaStatus === MediaStatus.Loading ? 0.5 : 1,
+                        }}
+                    />
+                )}
+                {post.file && mediaStatus === MediaStatus.Expanded && (
+                    <Media
+                        file={post.file}
+                        ref={this.handleVideoRef}
+                        onClick={this.handleMediaClick}
+                        style={{
+                            aspectRatio: `${post.file.width} / ${post.file.height}`,
+                        }}
+                    />
+                )}
+            </>
+        );
+    };
+    private renderMetadata = () => {
+        const { post, mobile, ...rest } = this.props;
+        const { formattedDate, fromNow } = this.state;
+        const replies = rest.repliesMap[post.id];
+        const showName = mobile ? post.name !== "Anonymous" : true;
+
+        return (
+            <Metadata>
+                {post.isOP && <Formatted color="rgb(180, 51, 211)">{post.title}</Formatted>}
+                {showName && (
                     <Formatted bold color="rgb(0, 101, 0)">
                         {post.name}
                     </Formatted>
-                    <time dateTime={post.createdAt} title={fromNow}>
-                        {formattedDate}
-                    </time>
-                    <Formatted monospaced>No.{post.id}</Formatted>
-                    {post.file && (
-                        <Attached href={post.file.url}>
-                            {post.file.name}
-                            {post.file.extension}
-                        </Attached>
-                    )}
-                    {replies!.map(this.renderReply)}
-                </Metadata>
-                {referredCardIds.length > 0 && <ReferredCards>{referredCardIds.map(this.renderReferredCard)}</ReferredCards>}
+                )}
+                <time dateTime={post.createdAt} title={fromNow}>
+                    {mobile ? fromNow : formattedDate}
+                </time>
+                <Formatted monospaced>No.{post.id}</Formatted>
+                {post.file && !mobile && (
+                    <Attached href={post.file.url}>
+                        {post.file.name}
+                        {post.file.extension}
+                    </Attached>
+                )}
+                {!mobile && replies!.map(this.renderReply)}
+            </Metadata>
+        );
+    };
+    private renderContent = () => {
+        const { post, highlighted, float = false, referredBy, mobile, ...rest } = this.props;
+        const { mediaStatus, referredCardIds } = this.state;
+
+        const shouldRenderContent = mobile ? post.content.length > 0 : true;
+        const metadata = this.renderMetadata();
+
+        let contentSideMedia: React.ReactNode = null;
+        if (!mobile) {
+            contentSideMedia = this.renderDesktopMedia();
+        }
+
+        let content: React.ReactNode = null;
+        if (shouldRenderContent) {
+            content = (
                 <Content shouldWrap={mediaStatus === MediaStatus.Expanded}>
-                    {post.file && mediaStatus !== MediaStatus.Expanded && (
-                        <ThumbnailViewer
-                            role="button"
-                            tabIndex={-1}
-                            onClick={this.handleThumbnailClick}
-                            file={post.file}
-                            style={{
-                                opacity: mediaStatus === MediaStatus.Loading ? 0.5 : 1,
-                            }}
-                        />
-                    )}
-                    {post.file && mediaStatus === MediaStatus.Expanded && (
-                        <Media
-                            file={post.file}
-                            ref={this.handleVideoRef}
-                            onClick={this.handleMediaClick}
-                            style={{
-                                aspectRatio: `${post.file.width} / ${post.file.height}`,
-                            }}
-                        />
-                    )}
+                    {contentSideMedia}
                     {post.content.length > 0 && (
                         <ContentRenderer
                             referredBy={referredBy}
@@ -210,6 +253,33 @@ class PostCard extends React.PureComponent<PostCardProps, PostCardStates> {
                         />
                     )}
                 </Content>
+            );
+        }
+
+        let children: React.ReactNode;
+        if (mobile) {
+            children = (
+                <MobileRoot>
+                    {post.file && <MobileThumbnail style={{ backgroundImage: `url(${post.file.thumbnailUrl})` }} />}
+                    <MobileContent>
+                        {metadata}
+                        {content}
+                    </MobileContent>
+                </MobileRoot>
+            );
+        } else {
+            children = (
+                <>
+                    {metadata}
+                    {!mobile && referredCardIds.length > 0 && <ReferredCards>{referredCardIds.map(this.renderReferredCard)}</ReferredCards>}
+                    {content}
+                </>
+            );
+        }
+
+        return (
+            <Root ref={!float && !referredBy ? rest.postRef(post.id) : undefined} highlighted={highlighted}>
+                {children}
             </Root>
         );
     };

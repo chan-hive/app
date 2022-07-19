@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Theme, useTheme } from "@mui/material";
+import { Theme, useMediaQuery, useTheme } from "@mui/material";
 
 import PostCard from "@components/Post/Card";
 import ThreadProvider from "@components/Thread/Provider";
@@ -24,6 +24,7 @@ export default function ThreadRoute({ thread, galleryOpened, onGalleryClose }: T
     const appBarHeight = useAppBarHeight();
     const [highlightedPostId, setHighlightedPostId] = React.useState<ThreadPost["id"] | null>(null);
     const [highlightedPost, setHighlightedPost] = React.useState<ThreadPost | null>(null);
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     React.useEffect(() => {
         if (!highlightedPostId) {
@@ -59,7 +60,7 @@ export default function ThreadRoute({ thread, galleryOpened, onGalleryClose }: T
             <Root>
                 <WidthWrapper>
                     {thread.posts.map(p => (
-                        <PostCard highlighted={highlightedPostId === p.id} key={p.id} post={p} />
+                        <PostCard mobile={isMobile} highlighted={highlightedPostId === p.id} key={p.id} post={p} />
                     ))}
                 </WidthWrapper>
             </Root>

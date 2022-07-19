@@ -1,3 +1,4 @@
+import { ButtonBase } from "@mui/material";
 import styled from "@emotion/styled";
 import Floating from "@components/Floating";
 import MediaThumbnail from "@components/UI/MediaThumbnail";
@@ -9,6 +10,25 @@ export const Root = styled.div<{ highlighted: boolean }>`
     border: 1px solid ${({ theme, highlighted }) => (highlighted ? theme.palette.primary.main : "rgba(0, 0, 0, 0.12)")};
 
     background: white;
+
+    ${({ theme }) => theme.breakpoints.down("sm")} {
+        margin-bottom: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+        padding: ${({ theme }) => theme.spacing(0)};
+
+        &:first-of-type {
+            border-top: 0;
+        }
+    }
+`;
+
+export const MobileRoot = styled.div`
+    margin: 0;
+    padding: 0;
+
+    display: flex;
 `;
 
 export const Metadata = styled.div`
@@ -36,6 +56,15 @@ export const Metadata = styled.div`
     > a {
         color: inherit;
     }
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+
+    ${({ theme }) => theme.breakpoints.down("sm")} {
+        margin: 0 0 ${({ theme }) => theme.spacing(0.5)};
+        font-size: 0.8rem;
+    }
 `;
 
 export const Reply = styled.a<{ referred?: boolean }>`
@@ -54,6 +83,10 @@ export const Reply = styled.a<{ referred?: boolean }>`
     cursor: pointer;
 
     opacity: ${({ referred }) => (referred ? 0.5 : 1)};
+
+    ${({ theme }) => theme.breakpoints.down("sm")} {
+        display: none;
+    }
 `;
 
 export const Attached = styled.a`
@@ -72,6 +105,10 @@ export const Content = styled.div<{ shouldWrap?: boolean }>`
     align-items: flex-start;
 
     font-size: 0.857143rem;
+
+    ${({ theme }) => theme.breakpoints.down("sm")} {
+        font-size: 0.8rem;
+    }
 `;
 
 export const ThumbnailViewer = styled(MediaThumbnail)`
@@ -82,7 +119,9 @@ export const ThumbnailViewer = styled(MediaThumbnail)`
     cursor: pointer;
 
     > img {
-        max-width: 100%;
+        width: 100%;
+
+        display: block;
     }
 `;
 
@@ -104,3 +143,23 @@ export const PostFloating = styled(Floating)`
 `;
 
 export const ReferredCards = styled.div``;
+
+export const MobileThumbnail = styled(ButtonBase)`
+    width: 64px;
+    height: 64px;
+
+    display: block;
+    flex: 0 0 64px;
+
+    color: white;
+    background-color: black;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+`;
+
+export const MobileContent = styled.div`
+    padding: ${({ theme }) => theme.spacing(1)};
+
+    flex: 1 1 auto;
+`;

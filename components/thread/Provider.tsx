@@ -1,7 +1,7 @@
 import React from "react";
 import memoizeOne from "memoize-one";
 
-import { ThreadContextProvider, ThreadContextValue } from "@components/Thread/Context";
+import { ThreadContextProvider, ThreadContextValue } from "@components/thread/Context";
 
 import { generateThreadContextValue } from "@utils/generateThreadContextValue";
 

@@ -7,7 +7,7 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import Card from "@components/UI/Card";
 import CardFooterItem from "@components/UI/CardFooterItem";
 
-import { BoardCardContent } from "@components/Board/Card.styles";
+import { BoardCardContent } from "@components/board/Card.styles";
 import { Placeholder } from "@styles/placeholder";
 
 import { BoardListItem } from "@utils/types";

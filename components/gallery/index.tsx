@@ -4,11 +4,11 @@ import memoizeOne from "memoize-one";
 import * as _ from "lodash";
 
 import PreventBodyScroll from "@components/UI/PreventBodyScroll";
-import { FileInformation } from "@components/Gallery/FileInformation";
-import GalleryOptions, { GalleryOptionsValue } from "@components/Gallery/Options";
-import { withThread, WithThreadProps } from "@components/Thread/withThread";
+import { FileInformation } from "@components/gallery/FileInformation";
+import GalleryOptions, { GalleryOptionsValue } from "@components/gallery/Options";
+import { withThread, WithThreadProps } from "@components/thread/withThread";
 
-import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, ThumbnailImage } from "@components/Gallery/index.styles";
+import { Body, Container, Playlist, PlaylistContainer, PlaylistItem, Root, ThumbnailImage } from "@components/gallery/index.styles";
 
 import VideoHelper from "@utils/video-helper";
 import { PostFile } from "@utils/types";

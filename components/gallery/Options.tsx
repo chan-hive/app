@@ -4,7 +4,7 @@ import { createTheme, styled, ThemeProvider, Tooltip as MuiTooltip, tooltipClass
 import RepeatOneIcon from "@mui/icons-material/RepeatOne";
 import RepeatAllIcon from "@mui/icons-material/Repeat";
 
-import { Root, IconButton } from "@components/Gallery/Options.styles";
+import { Root, IconButton } from "@components/gallery/Options.styles";
 
 export interface GalleryOptionsValue {
     repeat: "repeat-one" | "repeat-all";

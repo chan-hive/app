@@ -1,7 +1,7 @@
 import React from "react";
 import { Diff } from "utility-types";
 
-import { ThreadContextValue, useThread } from "@components/Thread/Context";
+import { ThreadContextValue, useThread } from "@components/thread/Context";
 
 // These props will be injected into the base component
 export interface WithThreadProps extends ThreadContextValue {}

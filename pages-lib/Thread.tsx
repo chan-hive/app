@@ -2,9 +2,9 @@ import React from "react";
 
 import { Theme, useMediaQuery, useTheme } from "@mui/material";
 
-import PostCard from "@components/Post/Card";
-import ThreadProvider from "@components/Thread/Provider";
-import Gallery from "@components/Gallery";
+import PostCard from "@components/post/Card";
+import ThreadProvider from "@components/thread/Provider";
+import Gallery from "@components/gallery";
 
 import { Root, WidthWrapper } from "@routes/Thread.styles";
 

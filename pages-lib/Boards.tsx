@@ -9,7 +9,7 @@ import { BoardListComponent, BoardListQuery } from "@query";
 import { DesktopOnly, MobileOnly } from "@styles/utils";
 import { reactNoop } from "@utils/noop";
 import { BoardListItem } from "@utils/types";
-import BoardCard from "@components/Board/Card";
+import BoardCard from "@components/board/Card";
 
 export interface BoardsRouteProps {}
 export interface BoardsRouteStates {

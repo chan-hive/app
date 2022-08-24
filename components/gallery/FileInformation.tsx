@@ -1,7 +1,7 @@
 import React from "react";
 import fileSize from "filesize";
 
-import { Root } from "@components/Gallery/FileInformation.styles";
+import { Root } from "@components/gallery/FileInformation.styles";
 
 import { PostFile } from "@utils/types";
 

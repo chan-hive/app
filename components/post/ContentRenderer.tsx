@@ -1,10 +1,10 @@
 import React from "react";
 import memoizeOne from "memoize-one";
 
-import { WithThreadProps } from "@components/Thread/withThread";
-import PostCard from "@components/Post/Card";
+import { WithThreadProps } from "@components/thread/withThread";
+import PostCard from "@components/post/Card";
 
-import { Anchor, Item, Root } from "@components/Post/ContentRenderer.styles";
+import { Anchor, Item, Root } from "@components/post/ContentRenderer.styles";
 
 import {
     CrossThreadQuoteLinkContentItem,

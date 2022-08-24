@@ -2,7 +2,7 @@ import React from "react";
 
 import { Grid, Theme, useMediaQuery } from "@mui/material";
 
-import ThreadCard from "@components/Thread/Card";
+import ThreadCard from "@components/thread/Card";
 
 const EMPTY_ARRAYS = [new Array(1).fill(null), new Array(2).fill(null), new Array(3).fill(null), new Array(4).fill(null)];
 

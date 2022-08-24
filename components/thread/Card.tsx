@@ -8,7 +8,7 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import Card from "@components/UI/Card";
 import CardFooterItem from "@components/UI/CardFooterItem";
 
-import { BoardName } from "@components/Thread/Card.styles";
+import { BoardName } from "@components/thread/Card.styles";
 
 import { Placeholder } from "@styles/placeholder";
 import { ThreadListItem } from "@utils/types";

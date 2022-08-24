@@ -3,8 +3,8 @@ import React, { MouseEvent } from "react";
 import moment from "moment";
 import memoizeOne from "memoize-one";
 
-import ContentRenderer from "@components/Post/ContentRenderer";
-import { withThread, WithThreadProps } from "@components/Thread/withThread";
+import ContentRenderer from "@components/post/ContentRenderer";
+import { withThread, WithThreadProps } from "@components/thread/withThread";
 
 import {
     Content,
@@ -20,7 +20,7 @@ import {
     MobileRoot,
     MobileThumbnail,
     MobileContent,
-} from "@components/Post/Card.styles";
+} from "@components/post/Card.styles";
 
 import { isMediaCached, preloadMedia } from "@utils/preloadMedia";
 import VideoHelper from "@utils/video-helper";

@@ -5,8 +5,8 @@ import { withApollo, WithApolloClient } from "@apollo/client/react/hoc";
 
 import { Container, Grid } from "@mui/material";
 
-import ThreadListLoader from "@components/Thread/ListLoader";
-import ThreadCard from "@components/Thread/Card";
+import ThreadListLoader from "@components/thread/ListLoader";
+import ThreadCard from "@components/thread/Card";
 
 import { Root, SkeletonContainer } from "@routes/Threads.styles";
 

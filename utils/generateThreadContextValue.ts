@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { ThreadContextValue } from "@components/Thread/Context";
+import { ThreadContextValue } from "@components/thread/Context";
 
 import { PostFile, ThreadWithPosts } from "@utils/types";
 import { generatePostRepliesMap } from "@utils/generatePostRepliesMap";
